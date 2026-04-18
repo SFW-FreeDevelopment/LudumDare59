@@ -80,8 +80,8 @@ namespace SignalScrubber.EditorTools
             // Screen: ScreenQuad (MeshRenderer) + DiegeticUIAnchor (empty).
             var screenQuad = screen.transform.Find("ScreenQuad")?.gameObject
                              ?? EnsureChild(screen, "ScreenQuad");
-            screenQuad.transform.localPosition = new Vector3(0f, -0.6f, -0.1f);
-            screenQuad.transform.localScale    = new Vector3(5.2f, 3.2f, 1f);
+            screenQuad.transform.localPosition = new Vector3(0f, 0f, -0.1f);
+            screenQuad.transform.localScale    = new Vector3(6.8f, 4.0f, 1f);
             var mf = GetOrAdd<MeshFilter>(screenQuad);
             if (mf.sharedMesh == null) mf.sharedMesh = GetQuadMesh();
             var mr = GetOrAdd<MeshRenderer>(screenQuad);
