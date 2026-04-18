@@ -2,17 +2,28 @@
 
 /* UIDocument wraps the UXML tree in a TemplateContainer. By default that
    container hugs content — force it to fill the panel so our absolutely
-   positioned children (cards, fade) get a full-screen positioning parent. */
+   positioned children (cards, fade) get a full-screen positioning parent.
+
+   picking-mode: ignore on the wrappers is critical: otherwise this panel
+   captures pointer events over the diegetic CRT controls underneath. The
+   cards themselves stay at the default 'position' so they still catch
+   clicks when visible. */
 TemplateContainer {
     flex-grow: 1;
     width: 100%;
     height: 100%;
+    picking-mode: ignore;
 }
 
 .overlay-root {
     flex-grow: 1;
     width: 100%;
     height: 100%;
+    picking-mode: ignore;
+}
+
+#fade {
+    picking-mode: ignore;
 }
 
 /* Fade / black card used for intro/outro in S16. */

@@ -53,11 +53,8 @@ namespace SignalScrubber.Polish
         void OnDisable()
         {
             if (manager != null) manager.OnRunCompleted -= HandleRunCompleted;
-            if (_overlayRoot != null)
-            {
-                _overlayRoot.UnregisterCallback<PointerDownEvent>(OnAnyClick);
-                _overlayRoot.UnregisterCallback<KeyDownEvent>(OnAnyKey);
-            }
+            if (_overlayRoot != null) _overlayRoot.UnregisterCallback<KeyDownEvent>(OnAnyKey);
+            if (_intro != null) _intro.UnregisterCallback<PointerDownEvent>(OnAnyClick);
         }
 
         void Start()
@@ -149,11 +146,21 @@ namespace SignalScrubber.Polish
                 _outro.style.display = DisplayStyle.None;
             }
 
-            root.pickingMode = PickingMode.Position;
-            root.RegisterCallback<PointerDownEvent>(OnAnyClick);
+            // Let clicks pass through to the diegetic panel below. The
+            // intro/outro/archive cards themselves stay pickable (default
+            // PickingMode.Position) so they can still be clicked when
+            // visible. Input dismissal is driven by the Update poll.
+            root.pickingMode = PickingMode.Ignore;
+            foreach (var child in root.Children())
+                if (child != _intro && child != _outro) child.pickingMode = PickingMode.Ignore;
+
+            // Keyboard still goes through UI Toolkit as a backup.
             root.focusable = true;
             root.Focus();
             root.RegisterCallback<KeyDownEvent>(OnAnyKey);
+
+            // Intro card itself is the clickable target while visible.
+            if (_intro != null) _intro.RegisterCallback<PointerDownEvent>(OnAnyClick);
         }
 
         IEnumerator RetryCacheOverlay()
@@ -172,8 +179,11 @@ namespace SignalScrubber.Polish
 
             if (_overlayRoot != null)
             {
-                _overlayRoot.UnregisterCallback<PointerDownEvent>(OnAnyClick);
                 _overlayRoot.UnregisterCallback<KeyDownEvent>(OnAnyKey);
+            }
+            if (_intro != null)
+            {
+                _intro.UnregisterCallback<PointerDownEvent>(OnAnyClick);
             }
             StartCoroutine(DismissIntroThenBegin());
         }
