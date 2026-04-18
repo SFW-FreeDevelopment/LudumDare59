@@ -1,4 +1,5 @@
 using System;
+using SignalScrubber.Core;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -6,15 +7,14 @@ namespace SignalScrubber.UI
 {
     /// <summary>
     /// Queries the diegetic CRT UIDocument for its slider, two knobs, and
-    /// Lock Signal button, and exposes their values. S05 logs on change;
-    /// S06 redirects these into <c>TuningState</c>.
+    /// Lock Signal button, and routes their values into <c>TuningState</c>.
+    /// The Lock press is surfaced as a C# event for <c>SignalManager</c>.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public sealed class CrtFrameController : MonoBehaviour
     {
-        public event Action<float> OnFrequencyChanged;
-        public event Action<float> OnNoiseChanged;
-        public event Action<float> OnPhaseChanged;
+        [SerializeField] TuningState tuning;
+
         public event Action OnLockPressed;
 
         Slider _frequency;
@@ -36,50 +36,32 @@ namespace SignalScrubber.UI
             _phase     = root.Q<KnobElement>("phase");
             _lock      = root.Q<Button>("lock");
 
-            if (_frequency != null)
-                _frequency.RegisterValueChangedCallback(HandleFrequency);
-            if (_noise != null)
-                _noise.RegisterCallback<ChangeEvent<float>>(HandleNoise);
-            if (_phase != null)
-                _phase.RegisterCallback<ChangeEvent<float>>(HandlePhase);
-            if (_lock != null)
-                _lock.clicked += HandleLock;
+            if (_frequency != null) _frequency.RegisterValueChangedCallback(HandleFrequency);
+            if (_noise     != null) _noise.RegisterCallback<ChangeEvent<float>>(HandleNoise);
+            if (_phase     != null) _phase.RegisterCallback<ChangeEvent<float>>(HandlePhase);
+            if (_lock      != null) _lock.clicked += HandleLock;
+
+            // Seed downstream systems with the current UI values so they do
+            // not start at zeroed defaults before the first interaction.
+            if (tuning != null)
+            {
+                if (_frequency != null) tuning.SetFrequency(_frequency.value);
+                if (_noise     != null) tuning.SetNoise(_noise.value);
+                if (_phase     != null) tuning.SetPhase(_phase.value);
+            }
         }
 
         void OnDisable()
         {
-            if (_frequency != null)
-                _frequency.UnregisterValueChangedCallback(HandleFrequency);
-            if (_noise != null)
-                _noise.UnregisterCallback<ChangeEvent<float>>(HandleNoise);
-            if (_phase != null)
-                _phase.UnregisterCallback<ChangeEvent<float>>(HandlePhase);
-            if (_lock != null)
-                _lock.clicked -= HandleLock;
+            if (_frequency != null) _frequency.UnregisterValueChangedCallback(HandleFrequency);
+            if (_noise     != null) _noise.UnregisterCallback<ChangeEvent<float>>(HandleNoise);
+            if (_phase     != null) _phase.UnregisterCallback<ChangeEvent<float>>(HandlePhase);
+            if (_lock      != null) _lock.clicked -= HandleLock;
         }
 
-        void HandleFrequency(ChangeEvent<float> e)
-        {
-            OnFrequencyChanged?.Invoke(e.newValue);
-            Debug.Log($"[CRT] frequency={e.newValue:0.00} noise={Noise:0.00} phase={Phase:0.00}");
-        }
-
-        void HandleNoise(ChangeEvent<float> e)
-        {
-            OnNoiseChanged?.Invoke(e.newValue);
-            Debug.Log($"[CRT] frequency={Frequency:0.00} noise={e.newValue:0.00} phase={Phase:0.00}");
-        }
-
-        void HandlePhase(ChangeEvent<float> e)
-        {
-            OnPhaseChanged?.Invoke(e.newValue);
-            Debug.Log($"[CRT] frequency={Frequency:0.00} noise={Noise:0.00} phase={e.newValue:0.00}");
-        }
-
-        void HandleLock()
-        {
-            OnLockPressed?.Invoke();
-            Debug.Log("[CRT] LOCK");
-        }
+        void HandleFrequency(ChangeEvent<float> e) => tuning?.SetFrequency(e.newValue);
+        void HandleNoise(ChangeEvent<float> e)     => tuning?.SetNoise(e.newValue);
+        void HandlePhase(ChangeEvent<float> e)     => tuning?.SetPhase(e.newValue);
+        void HandleLock()                          => OnLockPressed?.Invoke();
     }
 }
