@@ -400,3 +400,5 @@
  # Custom
  .idea/
  Unity/.idea
+
+ *.md
