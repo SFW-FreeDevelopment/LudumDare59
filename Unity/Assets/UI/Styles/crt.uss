@@ -72,7 +72,7 @@ TemplateContainer {
    the irregular slot layout in the CRT bezel art. */
 .controls-row {
     position: absolute;
-    top: 64%;
+    top: 60%;
     left: 0;
     right: 0;
     height: 90px;
@@ -88,9 +88,9 @@ TemplateContainer {
        intended centre position and subtract 60/viewport-width. */
 }
 
-#col-frequency { left: 23%; }
-#col-noise     { left: 31%; }
-#col-lock      { left: 57%; }
+#col-frequency { left: 26%; }
+#col-noise     { left: 34%; }
+#col-lock      { left: 60%; }
 #col-phase     { left: 67%; }
 
 .lock-column {
