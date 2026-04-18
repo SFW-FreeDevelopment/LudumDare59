@@ -58,7 +58,17 @@ namespace SignalScrubber.Polish
 
         IEnumerator RunTransition(SignalData signal, LockOutcome outcome)
         {
-            if (_archiveCard == null) CacheOverlay();
+            bool showCard = outcome != LockOutcome.Fail;
+
+            // Bring the overlay UIDocument online while the archive card is
+            // visible, then take it offline again so it stops blocking
+            // pointer events to the diegetic controls.
+            if (showCard && overlayDocument != null)
+            {
+                overlayDocument.enabled = true;
+                yield return null; // let UIDocument rebuild
+                CacheOverlay();
+            }
 
             switch (outcome)
             {
@@ -81,6 +91,9 @@ namespace SignalScrubber.Polish
             }
 
             HideArchive();
+            if (showCard && overlayDocument != null)
+                overlayDocument.enabled = false;
+
             _transitioning = false;
             if (manager != null) manager.Advance();
         }

@@ -197,6 +197,15 @@ namespace SignalScrubber.Polish
                 _intro.style.display = DisplayStyle.None;
             }
             SetControlsInteractable(true);
+
+            // Disable the overlay UIDocument entirely while no card is up.
+            // The panel blocks pointer events to the diegetic panel below
+            // even when its contents are all picking-mode: ignore, so the
+            // only reliable way to let the CRT controls receive clicks is
+            // to take the panel offline. LockFlash / ShowOutro flip it
+            // back on when they need it.
+            SetOverlayActive(false);
+
             _started = true;
             if (manager != null)
             {
@@ -209,11 +218,30 @@ namespace SignalScrubber.Polish
             }
         }
 
+        /// <summary>
+        /// Toggles the overlay UIDocument's component enabled state.
+        /// Used by LockFlash while showing the archive card, and by
+        /// ShowOutro. When re-enabled, the rootVisualElement is rebuilt;
+        /// callers must re-query their cached VisualElement references.
+        /// </summary>
+        public void SetOverlayActive(bool on)
+        {
+            if (overlayDocument == null) return;
+            overlayDocument.enabled = on;
+        }
+
         void HandleRunCompleted() => StartCoroutine(ShowOutro());
 
         IEnumerator ShowOutro()
         {
             SetControlsInteractable(false);
+
+            // Bring the overlay back online so the outro can render.
+            SetOverlayActive(true);
+            // rootVisualElement was rebuilt — re-cache references.
+            yield return null; // let UIDocument rebuild this frame
+            CacheOverlay();
+
             yield return new WaitForSeconds(outroDelay);
             if (_outro != null)
             {
