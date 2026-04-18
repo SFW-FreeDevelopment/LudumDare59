@@ -70,6 +70,7 @@ namespace SignalScrubber.EditorTools
 
             var bg   = EnsureChild(world, "Background");
             var desk = EnsureChild(world, "Desk");
+            bool crtExisted = world.transform.Find("CRT") != null;
             var crt  = EnsureChild(world, "CRT");
             var body       = EnsureChild(crt, "Body");
             var screen     = EnsureChild(crt, "Screen");
@@ -77,9 +78,13 @@ namespace SignalScrubber.EditorTools
 
             // Shift the whole CRT up and scale it so it dominates the upper
             // two-thirds of the view and leaves clear space at the bottom
-            // for the desk / keyboard art.
-            crt.transform.localPosition = new Vector3(0f, 1.0f, 0f);
-            crt.transform.localScale    = new Vector3(1.4f, 1.4f, 1f);
+            // for the desk / keyboard art. Seeded on first creation only so
+            // manual layout tweaks survive re-runs of Build Main Scene.
+            if (!crtExisted)
+            {
+                crt.transform.localPosition = new Vector3(0f, 1.0f, 0f);
+                crt.transform.localScale    = new Vector3(1.4f, 1.4f, 1f);
+            }
 
             // Placeholder plates. Z-layering matches ARCHITECTURE.md.
             EnsurePlate(bg,   "BackgroundPlate", new Color(0.06f, 0.07f, 0.08f),
@@ -189,13 +194,19 @@ namespace SignalScrubber.EditorTools
             Vector2 size, Vector3 localPos = default, float localZ = 0f)
         {
             var t = parent.transform.Find(name);
+            bool created = t == null;
             GameObject go = t != null ? t.gameObject : new GameObject(name);
-            if (t == null) go.transform.SetParent(parent.transform, false);
+            if (created) go.transform.SetParent(parent.transform, false);
 
-            go.transform.localPosition = localPos == default
-                ? new Vector3(0f, 0f, localZ)
-                : localPos;
-            go.transform.localScale = new Vector3(size.x, size.y, 1f);
+            // Seed transform only on first creation so manual layout
+            // changes survive re-runs of Build Main Scene.
+            if (created)
+            {
+                go.transform.localPosition = localPos == default
+                    ? new Vector3(0f, 0f, localZ)
+                    : localPos;
+                go.transform.localScale = new Vector3(size.x, size.y, 1f);
+            }
 
             var existingMf = go.GetComponent<MeshFilter>();
             var mf = existingMf != null ? existingMf : go.AddComponent<MeshFilter>();

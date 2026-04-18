@@ -70,18 +70,24 @@ namespace SignalScrubber.EditorTools
             var frame = EnsureSpriteSlot(body, "FrameSprite", localPos: new Vector3(0f, 0f, -0.01f),
                              sortingOrder: 0, color: Color.white);
             AutoAssignSprite(frame, "Assets/Art/CRT/CRT-monitor.png");
+            bool ledExisted = body.transform.Find("PowerLed") != null;
             var led = EnsureSpriteSlot(body, "PowerLed",
                                        localPos: new Vector3(3.2f, 2.2f, -0.02f),
                                        sortingOrder: 1,
                                        color: new Color(1f, 0.25f, 0.2f, 0.9f));
-            // Small scale for the LED slot until art arrives.
-            led.transform.localScale = new Vector3(0.15f, 0.15f, 1f);
+            // Seed a small initial scale only on first creation.
+            if (!ledExisted)
+                led.transform.localScale = new Vector3(0.15f, 0.15f, 1f);
 
             // Screen: ScreenQuad (MeshRenderer) + DiegeticUIAnchor (empty).
-            var screenQuad = screen.transform.Find("ScreenQuad")?.gameObject
-                             ?? EnsureChild(screen, "ScreenQuad");
-            screenQuad.transform.localPosition = new Vector3(0f, -0.6f, -0.1f);
-            screenQuad.transform.localScale    = new Vector3(5.2f, 3.2f, 1f);
+            // Transform is seeded once on creation; any later manual layout
+            // tweaks in the scene must survive re-runs of Build Prefabs.
+            var screenQuad = EnsureChildTracked(screen, "ScreenQuad", out bool screenQuadCreated);
+            if (screenQuadCreated)
+            {
+                screenQuad.transform.localPosition = new Vector3(0f, -0.6f, -0.1f);
+                screenQuad.transform.localScale    = new Vector3(5.2f, 3.2f, 1f);
+            }
             var mf = GetOrAdd<MeshFilter>(screenQuad);
             if (mf.sharedMesh == null) mf.sharedMesh = GetQuadMesh();
             var mr = GetOrAdd<MeshRenderer>(screenQuad);
@@ -101,10 +107,12 @@ namespace SignalScrubber.EditorTools
             if (oldBodyPlate != null) Object.DestroyImmediate(oldBodyPlate.gameObject);
 
             // Foreground: Glass slot.
+            bool glassExisted = foreground.transform.Find("Glass") != null;
             var glass = EnsureSpriteSlot(foreground, "Glass",
                                          localPos: new Vector3(0f, 0f, -0.2f),
                                          sortingOrder: 10, color: new Color(1f,1f,1f,0f));
-            glass.transform.localScale = new Vector3(1f, 1f, 1f);
+            if (!glassExisted)
+                glass.transform.localScale = new Vector3(1f, 1f, 1f);
 
             var oldGlassPlate = foreground.transform.Find("GlassPlate");
             if (oldGlassPlate != null) Object.DestroyImmediate(oldGlassPlate.gameObject);
@@ -203,10 +211,22 @@ namespace SignalScrubber.EditorTools
 
         static GameObject EnsureChild(GameObject parent, string name)
         {
+            return EnsureChildTracked(parent, name, out _);
+        }
+
+        /// <summary>
+        /// Like EnsureChild but reports whether the object was just created.
+        /// Callers that want to initialise transform-y things only on first
+        /// creation (so manual layout tweaks aren't clobbered on re-runs of
+        /// Build Prefabs) use the out flag to gate those writes.
+        /// </summary>
+        static GameObject EnsureChildTracked(GameObject parent, string name, out bool created)
+        {
             var t = parent.transform.Find(name);
-            if (t != null) return t.gameObject;
+            if (t != null) { created = false; return t.gameObject; }
             var go = new GameObject(name);
             go.transform.SetParent(parent.transform, false);
+            created = true;
             return go;
         }
 
@@ -221,15 +241,27 @@ namespace SignalScrubber.EditorTools
         static GameObject EnsureSpriteSlot(GameObject parent, string name,
             Vector3 localPos, int sortingOrder, Color color)
         {
-            var go = EnsureChild(parent, name);
-            go.transform.localPosition = localPos;
-            if (go.transform.localScale == Vector3.zero)
-                go.transform.localScale = Vector3.one;
+            var go = EnsureChildTracked(parent, name, out bool created);
+
+            // Only seed transform / sort / tint on first creation. Re-runs
+            // of Build Prefabs must not clobber manual layout tweaks the
+            // designer has made in the scene.
+            if (created)
+            {
+                go.transform.localPosition = localPos;
+                if (go.transform.localScale == Vector3.zero)
+                    go.transform.localScale = Vector3.one;
+            }
+
             var existing = go.GetComponent<SpriteRenderer>();
             var sr = existing != null ? existing : go.AddComponent<SpriteRenderer>();
-            sr.sortingOrder = sortingOrder;
-            sr.color = color;
-            // Intentionally leave sr.sprite null — artist drops in.
+            if (created)
+            {
+                sr.sortingOrder = sortingOrder;
+                sr.color = color;
+            }
+            // Intentionally leave sr.sprite null — artist drops in, or
+            // AutoAssignSprite wires it after this call.
             return go;
         }
 
