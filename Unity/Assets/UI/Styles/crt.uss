@@ -90,8 +90,11 @@ TemplateContainer {
 
 #col-noise     { left: 29.5%; }
 #col-noise > .knob { scale: 1.9 1.9; }
-#col-lock      { left: 60.5%; }
-#col-phase     { left: 67.5%; }
+
+#col-lock      { left: 45%; width: 160px; }
+
+#col-phase     { left: 64.5%; }
+#col-phase > .knob { scale: 1.9 1.9; }
 
 /* FREQUENCY column lives on the CRT's left bezel rather than in the
    bottom row. It is a direct child of .crt-panel, positioned absolutely
@@ -161,7 +164,7 @@ TemplateContainer {
 
 /* Lock button. */
 .lock-button {
-    width: 120px;
+    width: 160px;
     height: 54px;
     background-color: var(--ss-panel);
     border-color: var(--ss-amber);
