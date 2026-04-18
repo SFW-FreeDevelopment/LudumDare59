@@ -9,11 +9,16 @@ using UnityEngine.InputSystem;
 namespace SignalScrubber.Polish
 {
     /// <summary>
-    /// Bookends the run with intro and outro cards rendered by the
-    /// overlay UIDocument. Holds the intro up with the CRT playing
-    /// idle static beneath until the player clicks; dismisses it and
-    /// calls <see cref="SignalManager.Begin"/>; shows the outro card
-    /// after <see cref="SignalManager.OnRunCompleted"/>.
+    /// Bookends the run with intro and outro cards rendered by the overlay
+    /// UIDocument. Holds the intro up with the CRT playing idle static
+    /// beneath until the player clicks or presses a key; dismisses it and
+    /// calls <see cref="SignalManager.Begin"/>; shows the outro card after
+    /// <see cref="SignalManager.OnRunCompleted"/>.
+    ///
+    /// Defensively works even when the overlay UIDocument is missing or
+    /// broken: if the intro visual can't be found the component still polls
+    /// for input and calls Begin() directly, so the game never soft-locks
+    /// on a UI Toolkit wiring issue.
     /// </summary>
     public sealed class IntroOutroController : MonoBehaviour
     {
@@ -28,51 +33,95 @@ namespace SignalScrubber.Polish
         [SerializeField] float fadeDuration = 0.6f;
         [SerializeField] float outroDelay   = 0.5f;
 
+        [Header("Diagnostics")]
+        [SerializeField] bool verbose = true;
+
         VisualElement _intro;
         VisualElement _outro;
         VisualElement _overlayRoot;
         bool _dismissing;
+        bool _started;
 
         void OnEnable()
         {
+            ResolveMissingRefs();
             if (manager != null) manager.OnRunCompleted += HandleRunCompleted;
             SetControlsInteractable(false);
+            Log("OnEnable: manager=" + (manager != null) + " overlayDocument=" + (overlayDocument != null));
         }
 
         void OnDisable()
         {
             if (manager != null) manager.OnRunCompleted -= HandleRunCompleted;
-            if (_overlayRoot != null) _overlayRoot.UnregisterCallback<PointerDownEvent>(OnAnyClick);
+            if (_overlayRoot != null)
+            {
+                _overlayRoot.UnregisterCallback<PointerDownEvent>(OnAnyClick);
+                _overlayRoot.UnregisterCallback<KeyDownEvent>(OnAnyKey);
+            }
         }
 
-        // Cache in Start so the overlay UIDocument has built its panel by now.
-        // OnEnable is unreliable here because component init order between
-        // UIDocument and this script is not guaranteed.
-        void Start() => CacheOverlay();
+        void Start()
+        {
+            Log("Start: caching overlay...");
+            CacheOverlay();
+        }
 
         void Update()
         {
-            if (_intro == null || _intro.style.display == DisplayStyle.None) return;
-            if (PollDismissInput()) OnAnyClick(null);
+            // Already started — nothing to do.
+            if (_started) return;
+
+            // Poll input unconditionally while waiting to start. Works even
+            // if _intro failed to cache (the intro overlay may be visually
+            // broken, but the game still needs to become playable).
+            if (PollDismissInput())
+            {
+                Log("Update: input detected -> dismissing intro");
+                DismissNow();
+            }
         }
 
         static bool PollDismissInput()
         {
 #if ENABLE_INPUT_SYSTEM
             var kb = Keyboard.current;
-            if (kb != null && (kb.spaceKey.wasPressedThisFrame
-                               || kb.enterKey.wasPressedThisFrame
-                               || kb.anyKey.wasPressedThisFrame))
-                return true;
+            if (kb != null)
+            {
+                if (kb.spaceKey.wasPressedThisFrame) return true;
+                if (kb.enterKey.wasPressedThisFrame) return true;
+                if (kb.anyKey.wasPressedThisFrame)   return true;
+            }
             var mouse = Mouse.current;
-            if (mouse != null && mouse.leftButton.wasPressedThisFrame)
-                return true;
+            if (mouse != null && mouse.leftButton.wasPressedThisFrame) return true;
 #endif
 #if ENABLE_LEGACY_INPUT_MANAGER
-            if (Input.anyKeyDown || Input.GetMouseButtonDown(0))
-                return true;
+            if (Input.anyKeyDown || Input.GetMouseButtonDown(0)) return true;
 #endif
             return false;
+        }
+
+        void ResolveMissingRefs()
+        {
+            if (manager == null)
+            {
+                manager = FindObjectOfType<SignalManager>();
+                if (manager != null) Log("ResolveMissingRefs: found SignalManager via FindObjectOfType");
+            }
+            if (overlayDocument == null)
+            {
+                foreach (var doc in FindObjectsOfType<UIDocument>())
+                {
+                    if (doc.name == "OverlayUI") { overlayDocument = doc; break; }
+                }
+                if (overlayDocument != null) Log("ResolveMissingRefs: found OverlayUI UIDocument via FindObjectsOfType");
+            }
+            if (controlsToDisable == null)
+            {
+                foreach (var doc in FindObjectsOfType<UIDocument>())
+                {
+                    if (doc.name == "DiegeticUI") { controlsToDisable = doc.gameObject; break; }
+                }
+            }
         }
 
         void CacheOverlay()
@@ -80,7 +129,7 @@ namespace SignalScrubber.Polish
             var root = overlayDocument != null ? overlayDocument.rootVisualElement : null;
             if (root == null)
             {
-                // UIDocument not ready yet — retry next frame.
+                Log("CacheOverlay: overlay root null, retrying next frame");
                 StartCoroutine(RetryCacheOverlay());
                 return;
             }
@@ -88,6 +137,7 @@ namespace SignalScrubber.Polish
             _overlayRoot = root;
             _intro = root.Q<VisualElement>("intro");
             _outro = root.Q<VisualElement>("outro");
+            Log($"CacheOverlay: intro={_intro != null} outro={_outro != null}");
 
             if (_intro != null)
             {
@@ -100,19 +150,12 @@ namespace SignalScrubber.Polish
                 _outro.style.display = DisplayStyle.None;
             }
 
-            // Register on the panel root so any click anywhere in the overlay
-            // panel dismisses the intro — the intro card's own hit area can
-            // be unreliable if USS layout ever shrinks it below full-screen.
             root.pickingMode = PickingMode.Position;
             root.RegisterCallback<PointerDownEvent>(OnAnyClick);
-
-            // Keyboard fallback via UI Toolkit itself (backend-agnostic).
             root.focusable = true;
             root.Focus();
             root.RegisterCallback<KeyDownEvent>(OnAnyKey);
         }
-
-        void OnAnyKey(KeyDownEvent _) => OnAnyClick(null);
 
         IEnumerator RetryCacheOverlay()
         {
@@ -120,10 +163,14 @@ namespace SignalScrubber.Polish
             CacheOverlay();
         }
 
-        void OnAnyClick(PointerDownEvent _)
+        void OnAnyKey(KeyDownEvent _) => DismissNow();
+        void OnAnyClick(PointerDownEvent _) => DismissNow();
+
+        void DismissNow()
         {
-            if (_dismissing || _intro == null || _intro.style.display == DisplayStyle.None) return;
+            if (_started || _dismissing) return;
             _dismissing = true;
+
             if (_overlayRoot != null)
             {
                 _overlayRoot.UnregisterCallback<PointerDownEvent>(OnAnyClick);
@@ -134,10 +181,23 @@ namespace SignalScrubber.Polish
 
         IEnumerator DismissIntroThenBegin()
         {
-            yield return FadeOut(_intro, fadeDuration);
-            if (_intro != null) _intro.style.display = DisplayStyle.None;
+            Log("DismissIntroThenBegin: fading and starting...");
+            if (_intro != null)
+            {
+                yield return FadeOut(_intro, fadeDuration);
+                _intro.style.display = DisplayStyle.None;
+            }
             SetControlsInteractable(true);
-            if (manager != null) manager.Begin();
+            _started = true;
+            if (manager != null)
+            {
+                Log("DismissIntroThenBegin: calling SignalManager.Begin()");
+                manager.Begin();
+            }
+            else
+            {
+                Debug.LogError("[Intro] SignalManager is null — cannot begin the run.");
+            }
         }
 
         void HandleRunCompleted() => StartCoroutine(ShowOutro());
@@ -182,6 +242,11 @@ namespace SignalScrubber.Polish
                 yield return null;
             }
             ve.style.opacity = to;
+        }
+
+        void Log(string msg)
+        {
+            if (verbose) Debug.Log("[Intro] " + msg);
         }
     }
 }
