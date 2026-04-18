@@ -1,4 +1,5 @@
 using System;
+using SignalScrubber.Audio;
 using SignalScrubber.Core;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,14 +9,22 @@ namespace SignalScrubber.UI
     /// <summary>
     /// Queries the diegetic CRT UIDocument for its slider, two knobs, and
     /// Lock Signal button, and routes their values into <c>TuningState</c>.
-    /// The Lock press is surfaced as a C# event for <c>SignalManager</c>.
+    /// The Lock press is surfaced as a C# event for <c>SignalManager</c>,
+    /// and detent-level changes are clicked through <c>AudioDirector</c>.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public sealed class CrtFrameController : MonoBehaviour
     {
+        const int Detents = 20;
+
         [SerializeField] TuningState tuning;
+        [SerializeField] AudioDirector audio;
 
         public event Action OnLockPressed;
+
+        int _freqStep = int.MinValue;
+        int _noiseStep = int.MinValue;
+        int _phaseStep = int.MinValue;
 
         Slider _frequency;
         KnobElement _noise;
@@ -59,9 +68,32 @@ namespace SignalScrubber.UI
             if (_lock      != null) _lock.clicked -= HandleLock;
         }
 
-        void HandleFrequency(ChangeEvent<float> e) => tuning?.SetFrequency(e.newValue);
-        void HandleNoise(ChangeEvent<float> e)     => tuning?.SetNoise(e.newValue);
-        void HandlePhase(ChangeEvent<float> e)     => tuning?.SetPhase(e.newValue);
-        void HandleLock()                          => OnLockPressed?.Invoke();
+        void HandleFrequency(ChangeEvent<float> e)
+        {
+            tuning?.SetFrequency(e.newValue);
+            ClickIfStepChanged(e.newValue, ref _freqStep);
+        }
+
+        void HandleNoise(ChangeEvent<float> e)
+        {
+            tuning?.SetNoise(e.newValue);
+            ClickIfStepChanged(e.newValue, ref _noiseStep);
+        }
+
+        void HandlePhase(ChangeEvent<float> e)
+        {
+            tuning?.SetPhase(e.newValue);
+            ClickIfStepChanged(e.newValue, ref _phaseStep);
+        }
+
+        void HandleLock() => OnLockPressed?.Invoke();
+
+        void ClickIfStepChanged(float value, ref int lastStep)
+        {
+            int step = Mathf.RoundToInt(value * Detents);
+            if (step == lastStep) return;
+            lastStep = step;
+            if (audio != null) audio.Click();
+        }
     }
 }

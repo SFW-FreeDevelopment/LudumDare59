@@ -1,3 +1,4 @@
+using SignalScrubber.Audio;
 using SignalScrubber.Core;
 using SignalScrubber.Polish;
 using SignalScrubber.Rendering;
@@ -68,6 +69,22 @@ namespace SignalScrubber.EditorTools
                 if (wave != null) SetSerializedReference(wave, "manager", manager);
             }
 
+            // AudioDirector with four child AudioSources.
+            var audio = EnsureChildComponent<AudioDirector>(systems, "AudioDirector");
+            var staticBed  = EnsureAudioSource(audio.gameObject, "StaticBed", loop: true, playOnAwake: true);
+            var humBed     = EnsureAudioSource(audio.gameObject, "HumBed",    loop: true, playOnAwake: true);
+            var signalTone = EnsureAudioSource(audio.gameObject, "SignalTone", loop: true, playOnAwake: false);
+            var oneShot    = EnsureAudioSource(audio.gameObject, "OneShot",    loop: false, playOnAwake: false);
+            SetSerializedReference(audio, "tuning",     tuning);
+            SetSerializedReference(audio, "manager",    manager);
+            SetSerializedReference(audio, "staticBed",  staticBed);
+            SetSerializedReference(audio, "humBed",     humBed);
+            SetSerializedReference(audio, "signalTone", signalTone);
+            SetSerializedReference(audio, "oneShot",    oneShot);
+
+            // CrtFrameController.audio -> AudioDirector (for detent clicks).
+            if (ctrl != null) SetSerializedReference(ctrl, "audio", audio);
+
             // AmbientFlicker on Systems/AmbientFlicker, wired to the binder
             // and the PowerLed SpriteRenderer on the CRT body.
             var flicker = EnsureChildComponent<AmbientFlicker>(systems, "AmbientFlicker");
@@ -136,6 +153,16 @@ namespace SignalScrubber.EditorTools
             GameObject go = t != null ? t.gameObject : new GameObject(childName);
             if (t == null) go.transform.SetParent(parent.transform, false);
             return go.GetComponent<T>() ?? go.AddComponent<T>();
+        }
+
+        static AudioSource EnsureAudioSource(GameObject parent, string childName,
+            bool loop, bool playOnAwake)
+        {
+            var src = EnsureChildComponent<AudioSource>(parent, childName);
+            src.loop = loop;
+            src.playOnAwake = playOnAwake;
+            src.spatialBlend = 0f; // 2D
+            return src;
         }
 
         static GameObject FindInScene(string path)
