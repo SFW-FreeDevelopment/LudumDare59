@@ -23,8 +23,8 @@ namespace SignalScrubber.Polish
         [SerializeField] UIDocument overlayDocument;
 
         [Header("Timings (seconds)")]
-        [SerializeField] float successHold = 1.5f;
-        [SerializeField] float partialHold = 1.0f;
+        [SerializeField] float successHold = 3.5f;
+        [SerializeField] float partialHold = 2.5f;
         [SerializeField] float failHold    = 1.0f;
 
         VisualElement _archiveCard;

@@ -42,7 +42,7 @@ TemplateContainer {
    orthoSize 5.4 at 16:9. */
 .signal-area {
     position: absolute;
-    top: 28%;
+    top: 22%;
     left: 34%;
     right: 34%;
     height: 22%;
@@ -72,11 +72,11 @@ TemplateContainer {
    the bottom edge of the bezel. */
 .controls-row {
     position: absolute;
-    top: 70%;
-    left: 22%;
-    right: 22%;
+    top: 68%;
+    left: 24%;
+    right: 24%;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     height: 90px;
 }
