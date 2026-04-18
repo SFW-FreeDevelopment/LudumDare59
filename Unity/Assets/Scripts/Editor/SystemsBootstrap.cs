@@ -102,11 +102,19 @@ namespace SignalScrubber.EditorTools
             SetSerializedReference(lockFlash, "manager", manager);
             if (binder != null) SetSerializedReference(lockFlash, "binder", binder);
             var overlayGo = FindInScene("UI/OverlayUI");
+            UnityEngine.UIElements.UIDocument overlayDoc = null;
             if (overlayGo != null)
             {
-                var overlayDoc = overlayGo.GetComponent<UnityEngine.UIElements.UIDocument>();
+                overlayDoc = overlayGo.GetComponent<UnityEngine.UIElements.UIDocument>();
                 if (overlayDoc != null) SetSerializedReference(lockFlash, "overlayDocument", overlayDoc);
             }
+
+            // IntroOutroController drives Begin() on intro dismissal and the
+            // outro card on OnRunCompleted.
+            var intro = EnsureChildComponent<IntroOutroController>(systems, "IntroOutroController");
+            if (overlayDoc != null) SetSerializedReference(intro, "overlayDocument", overlayDoc);
+            SetSerializedReference(intro, "manager", manager);
+            if (diegetic != null) SetSerializedReference(intro, "controlsToDisable", diegetic);
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);

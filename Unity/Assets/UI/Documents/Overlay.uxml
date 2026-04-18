@@ -11,6 +11,15 @@
             <ui:Label name="archive-body"  class="archive-body" />
         </ui:VisualElement>
 
-        <!-- S16 adds intro / outro cards here. -->
+        <ui:VisualElement name="intro" class="card">
+            <ui:Label text="SIGNAL SCRUBBER" class="card-title" />
+            <ui:Label text="Tune. Listen. Archive what comes through." class="card-sub" />
+            <ui:Label text="[ click anywhere to begin ]" class="card-hint" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="outro" class="card" style="opacity: 0; display: none">
+            <ui:Label text="END OF BROADCAST" class="card-title" />
+            <ui:Label text="Some signals were never meant for us." class="card-sub" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

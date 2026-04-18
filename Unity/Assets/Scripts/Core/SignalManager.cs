@@ -21,6 +21,10 @@ namespace SignalScrubber.Core
         [Range(0f, 1f)] [SerializeField] float successThreshold = 0.85f;
         [Range(0f, 1f)] [SerializeField] float partialThreshold = 0.55f;
 
+        [Header("Start-up")]
+        [Tooltip("When true, Begin() fires on enable. Leave off when IntroOutroController is driving the flow.")]
+        [SerializeField] bool autoStart = false;
+
         public SignalData Current => IsValidIndex ? signals[_index] : null;
         public int Index => _index;
         public int Count => signals?.Length ?? 0;
@@ -37,6 +41,7 @@ namespace SignalScrubber.Core
         void OnEnable()
         {
             if (frame != null) frame.OnLockPressed += HandleLock;
+            if (autoStart) Begin();
         }
 
         void OnDisable()
