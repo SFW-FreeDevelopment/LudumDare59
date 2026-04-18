@@ -114,26 +114,28 @@ TemplateContainer {
     border-radius: 2px;
 }
 
-/* Knob. */
+/* Knob — background-image is the static ring/plate and the rotating
+   child indicator uses the knob art itself, centered and scaled to
+   match. The whole stack rotates around the element centre. */
 .knob {
     width: 80px;
     height: 80px;
-    background-color: var(--ss-panel);
-    border-color: var(--ss-dim);
-    border-width: 2px;
-    border-radius: 40px;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: 6px;
+    background-image: url("project://database/Assets/Art/CRT/knob-background.png");
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(0, 0, 0, 0);
     cursor: link;
 }
 
 .knob-indicator {
-    width: 6px;
-    height: 22px;
-    background-color: var(--ss-phosphor);
-    border-radius: 2px;
-    transform-origin: 50% 34px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("project://database/Assets/Art/CRT/knob.png");
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(0, 0, 0, 0);
+    transform-origin: center;
 }
 
 /* Lock button. */
