@@ -117,15 +117,30 @@ namespace SignalScrubber.EditorTools
                              sortingOrder: 0, color: Color.white);
 
             var clutter = desk.transform.Find("Clutter")?.gameObject ?? EnsureChild(desk, "Clutter");
-            string[] clutterSlots = { "Mug", "Keyboard", "Papers", "Tapes", "StickyNotes", "Books" };
+            string[] clutterSlots =
+            {
+                "Mug", "Keyboard", "Papers", "Tapes",
+                "StickyNote1", "StickyNote2", "Books",
+            };
             int order = 1;
             foreach (var name in clutterSlots)
             {
                 EnsureSpriteSlot(clutter, name,
-                                 localPos: new Vector3((order - 3.5f) * 0.6f, 0.1f, -0.01f),
+                                 localPos: new Vector3((order - 4f) * 0.6f, 0.1f, -0.01f),
                                  sortingOrder: order, color: Color.white);
                 order++;
             }
+
+            // Auto-assign the artist-supplied sticky note PNGs if present.
+            var note1 = clutter.transform.Find("StickyNote1")?.gameObject;
+            var note2 = clutter.transform.Find("StickyNote2")?.gameObject;
+            if (note1 != null) AutoAssignSprite(note1, "Assets/Art/CRT/sticky-note-1.png");
+            if (note2 != null) AutoAssignSprite(note2, "Assets/Art/CRT/sticky-note-2.png");
+
+            // Legacy slot from the pre-split layout. Delete if present to
+            // avoid confusion with the new StickyNote1 / StickyNote2 pair.
+            var legacy = clutter.transform.Find("StickyNotes");
+            if (legacy != null) Object.DestroyImmediate(legacy.gameObject);
 
             var oldPlate = desk.transform.Find("DeskPlate");
             if (oldPlate != null) Object.DestroyImmediate(oldPlate.gameObject);

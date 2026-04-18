@@ -37,7 +37,8 @@ Populated as stories land. Each row names a `SpriteRenderer` slot created by a s
 | S04   | Desk   | `Clutter/Keyboard`                    | SpriteRenderer | Retro keyboard |
 | S04   | Desk   | `Clutter/Papers`                      | SpriteRenderer | Loose scribbled notes |
 | S04   | Desk   | `Clutter/Tapes`                       | SpriteRenderer | VHS / cassette stack |
-| S04   | Desk   | `Clutter/StickyNotes`                 | SpriteRenderer | Stack or group of stickies |
+| S04   | Desk   | `Clutter/StickyNote1`                 | SpriteRenderer | Auto-assigned from `Art/CRT/sticky-note-1.png` |
+| S04   | Desk   | `Clutter/StickyNote2`                 | SpriteRenderer | Auto-assigned from `Art/CRT/sticky-note-2.png` |
 | S04   | Desk   | `Clutter/Books`                       | SpriteRenderer | Manuals / technical books |
 
 ### Signals (S07)

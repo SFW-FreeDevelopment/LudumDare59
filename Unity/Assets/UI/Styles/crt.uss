@@ -125,17 +125,18 @@ TemplateContainer {
     --unity-metrics-default-border_radius: 2px;
 }
 .freq-slider > .unity-base-slider__input {
-    background-color: var(--ss-panel);
-    border-color: var(--ss-dim);
-    border-width: 1px;
-    border-radius: 2px;
+    background-image: url("project://database/Assets/Art/CRT/slider-background.png");
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
 }
 .freq-slider > .unity-base-slider__input > .unity-base-slider__dragger {
-    background-color: var(--ss-phosphor);
-    border-color: var(--ss-phosphor);
-    width: 28px;
-    height: 14px;
-    border-radius: 2px;
+    background-image: url("project://database/Assets/Art/CRT/slider-knob.png");
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    width: 44px;
+    height: 22px;
 }
 
 /* Knob — the static background ring is the larger outer element;
