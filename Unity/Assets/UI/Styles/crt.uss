@@ -155,9 +155,11 @@ TemplateContainer {
 }
 .freq-slider > .unity-base-slider__input {
     background-image: url("project://database/Assets/Art/CRT/slider-background.png");
-    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-scale-mode: stretch-to-fill;
     background-color: rgba(0, 0, 0, 0);
     border-width: 0;
+    margin: 0;
+    padding: 0;
 }
 .freq-slider > .unity-base-slider__input > .unity-base-slider__dragger {
     background-image: url("project://database/Assets/Art/CRT/slider-knob.png");
