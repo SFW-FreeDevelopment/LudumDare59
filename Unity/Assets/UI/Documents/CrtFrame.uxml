@@ -12,13 +12,13 @@
             <ui:Label name="signal-strength" class="signal-strength" text="SIGNAL STRENGTH  — — %" />
         </ui:VisualElement>
 
-        <ui:VisualElement name="controls-row" class="controls-row">
-            <ui:VisualElement name="col-frequency" class="control-column">
-                <ui:Slider name="frequency" class="freq-slider" direction="Vertical"
-                           low-value="0" high-value="1" value="0.5" />
-                <ui:Label text="FREQUENCY" class="crt-label" />
-            </ui:VisualElement>
+        <ui:VisualElement name="col-frequency" class="control-column bezel-slider">
+            <ui:Slider name="frequency" class="freq-slider" direction="Vertical"
+                       low-value="0" high-value="1" value="0.5" />
+            <ui:Label text="FREQUENCY" class="crt-label" />
+        </ui:VisualElement>
 
+        <ui:VisualElement name="controls-row" class="controls-row">
             <ui:VisualElement name="col-noise" class="control-column">
                 <ss:KnobElement name="noise" class="knob" />
                 <ui:Label text="NOISE FILTER" class="crt-label" />

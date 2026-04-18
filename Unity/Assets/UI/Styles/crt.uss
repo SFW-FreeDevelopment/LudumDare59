@@ -88,21 +88,34 @@ TemplateContainer {
        intended centre position and subtract 60/viewport-width. */
 }
 
-#col-frequency { left: 25%; }
 #col-noise     { left: 33%; }
 #col-lock      { left: 60.5%; }
 #col-phase     { left: 67.5%; }
+
+/* FREQUENCY column lives on the CRT's left bezel rather than in the
+   bottom row. It is a direct child of .crt-panel, positioned absolutely
+   with respect to the viewport and sized to span most of the glass
+   vertically so the slider reads as a proper fader. */
+#col-frequency.bezel-slider {
+    position: absolute;
+    left: 25%;
+    top: 22%;
+    width: 120px;
+    height: 46%;
+    align-items: center;
+    justify-content: flex-start;
+}
 
 .lock-column {
     justify-content: center;
     height: 100%;
 }
 
-/* Slider reskin. Matched in height to the knob elements (80px) so all
-   four controls read as a single horizontal row inside the bezel. */
+/* Slider reskin. Mounted vertically on the CRT's left bezel; height
+   fills its bezel-slider column so it reads as a proper fader. */
 .freq-slider {
     width: 40px;
-    height: 80px;
+    height: 88%;
     --unity-metrics-default-border_radius: 2px;
 }
 .freq-slider > .unity-base-slider__input {
