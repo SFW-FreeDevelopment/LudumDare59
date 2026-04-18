@@ -124,7 +124,17 @@ namespace SignalScrubber.EditorTools
                              localPos: new Vector3(0f, 0f, 0f),
                              sortingOrder: 0, color: Color.white);
 
-            var clutter = desk.transform.Find("Clutter")?.gameObject ?? EnsureChild(desk, "Clutter");
+            // Clutter lives on the desk surface, below the monitor. Seed
+            // its position on first creation so the sticky notes + other
+            // props sit on the brown desk band (world Y ≈ -2.5) instead
+            // of stranded at viewport centre.
+            var clutter = EnsureChildTracked(desk, "Clutter", out bool clutterCreated);
+            // Seed on first creation OR when it's still at the origin (so
+            // previous Build Prefabs runs with Clutter stranded at 0,0,0
+            // migrate cleanly). Respect any manual tweak away from zero.
+            if (clutterCreated || clutter.transform.localPosition == Vector3.zero)
+                clutter.transform.localPosition = new Vector3(0f, -2.5f, 0f);
+
             string[] clutterSlots =
             {
                 "Mug", "Keyboard", "Papers", "Tapes",
@@ -150,8 +160,10 @@ namespace SignalScrubber.EditorTools
             var legacy = clutter.transform.Find("StickyNotes");
             if (legacy != null) Object.DestroyImmediate(legacy.gameObject);
 
-            var oldPlate = desk.transform.Find("DeskPlate");
-            if (oldPlate != null) Object.DestroyImmediate(oldPlate.gameObject);
+            // NOTE: we intentionally leave DeskPlate alone. It is created
+            // by SceneBootstrap as a brown MeshRenderer placeholder that
+            // represents the desk surface until the artist drops in real
+            // desk art on DeskSurface. Deleting it makes the desk vanish.
         }
 
         static void ReparentDiegeticUnderCrt(GameObject crt)
