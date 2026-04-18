@@ -116,6 +116,11 @@ namespace SignalScrubber.EditorTools
             SetSerializedReference(intro, "manager", manager);
             if (diegetic != null) SetSerializedReference(intro, "controlsToDisable", diegetic);
 
+            // Minimal no-dependency input poller as a belts-and-braces
+            // fallback in case IntroOutroController's UI Toolkit wiring
+            // ever breaks. Safe to leave in shipping build.
+            EnsureChildComponent<EmergencyStarter>(systems, "EmergencyStarter");
+
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
             Debug.Log("[SignalScrubber] Systems wired.");

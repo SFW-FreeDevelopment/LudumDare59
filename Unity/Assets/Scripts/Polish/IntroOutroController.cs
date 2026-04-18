@@ -89,13 +89,14 @@ namespace SignalScrubber.Polish
             {
                 if (kb.spaceKey.wasPressedThisFrame) return true;
                 if (kb.enterKey.wasPressedThisFrame) return true;
-                if (kb.anyKey.wasPressedThisFrame)   return true;
             }
             var mouse = Mouse.current;
             if (mouse != null && mouse.leftButton.wasPressedThisFrame) return true;
 #endif
 #if ENABLE_LEGACY_INPUT_MANAGER
-            if (Input.anyKeyDown || Input.GetMouseButtonDown(0)) return true;
+            if (Input.GetKeyDown(KeyCode.Space))  return true;
+            if (Input.GetKeyDown(KeyCode.Return)) return true;
+            if (Input.GetMouseButtonDown(0))      return true;
 #endif
             return false;
         }
@@ -104,23 +105,21 @@ namespace SignalScrubber.Polish
         {
             if (manager == null)
             {
-                manager = FindObjectOfType<SignalManager>();
-                if (manager != null) Log("ResolveMissingRefs: found SignalManager via FindObjectOfType");
+                manager = FindFirstObjectByType<SignalManager>();
+                if (manager != null) Log("ResolveMissingRefs: found SignalManager");
             }
+
+            var docs = FindObjectsByType<UIDocument>(FindObjectsSortMode.None);
             if (overlayDocument == null)
             {
-                foreach (var doc in FindObjectsOfType<UIDocument>())
-                {
+                foreach (var doc in docs)
                     if (doc.name == "OverlayUI") { overlayDocument = doc; break; }
-                }
-                if (overlayDocument != null) Log("ResolveMissingRefs: found OverlayUI UIDocument via FindObjectsOfType");
+                if (overlayDocument != null) Log("ResolveMissingRefs: found OverlayUI");
             }
             if (controlsToDisable == null)
             {
-                foreach (var doc in FindObjectsOfType<UIDocument>())
-                {
+                foreach (var doc in docs)
                     if (doc.name == "DiegeticUI") { controlsToDisable = doc.gameObject; break; }
-                }
             }
         }
 
