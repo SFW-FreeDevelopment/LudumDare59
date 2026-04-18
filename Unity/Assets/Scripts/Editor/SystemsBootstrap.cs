@@ -30,16 +30,58 @@ namespace SignalScrubber.EditorTools
 
             // CrtFrameController.tuning -> TuningState
             var diegetic = FindInScene("UI/DiegeticUI");
+            CrtFrameController ctrl = null;
             if (diegetic != null)
             {
-                var ctrl = diegetic.GetComponent<CrtFrameController>();
+                ctrl = diegetic.GetComponent<CrtFrameController>();
                 if (ctrl != null)
                     SetSerializedReference(ctrl, "tuning", tuning);
             }
 
+            // SignalManager (+ DebugSignalLogger) on its own child, with wired refs.
+            var manager = EnsureChildComponent<SignalManager>(systems, "SignalManager");
+            if (manager.gameObject.GetComponent<DebugSignalLogger>() == null)
+                manager.gameObject.AddComponent<DebugSignalLogger>();
+            SetSerializedReference(manager, "tuning", tuning);
+            if (ctrl != null) SetSerializedReference(manager, "frame", ctrl);
+            SetSerializedArray(manager, "signals", LoadAllSignals());
+
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
             Debug.Log("[SignalScrubber] Systems wired.");
+        }
+
+        static SignalData[] LoadAllSignals()
+        {
+            var guids = AssetDatabase.FindAssets("t:SignalData", new[] { "Assets/ScriptableObjects/Signals" });
+            var list = new System.Collections.Generic.List<SignalData>(guids.Length);
+            foreach (var g in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(g);
+                var s = AssetDatabase.LoadAssetAtPath<SignalData>(path);
+                if (s != null) list.Add(s);
+            }
+            // Sort by filename for stable ordering (Signal_01, Signal_02, ...).
+            list.Sort((a, b) => string.Compare(
+                AssetDatabase.GetAssetPath(a),
+                AssetDatabase.GetAssetPath(b),
+                System.StringComparison.Ordinal));
+            return list.ToArray();
+        }
+
+        static void SetSerializedArray(Object target, string propertyPath, Object[] values)
+        {
+            var so = new SerializedObject(target);
+            var prop = so.FindProperty(propertyPath);
+            if (prop == null || !prop.isArray)
+            {
+                Debug.LogWarning($"[SignalScrubber] {target.GetType().Name}.{propertyPath} is not an array.");
+                return;
+            }
+            prop.arraySize = values.Length;
+            for (int i = 0; i < values.Length; i++)
+                prop.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
+            so.ApplyModifiedPropertiesWithoutUndo();
         }
 
         // ---------- helpers ----------
