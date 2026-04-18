@@ -41,6 +41,7 @@ namespace SignalScrubber.Polish
         VisualElement _overlayRoot;
         bool _dismissing;
         bool _started;
+        bool _outroShowing;
 
         void OnEnable()
         {
@@ -133,34 +134,35 @@ namespace SignalScrubber.Polish
             _overlayRoot = root;
             _intro = root.Q<VisualElement>("intro");
             _outro = root.Q<VisualElement>("outro");
-            Log($"CacheOverlay: intro={_intro != null} outro={_outro != null}");
+            Log($"CacheOverlay: intro={_intro != null} outro={_outro != null} started={_started}");
 
+            // The overlay UIDocument is toggled off/on across the run. Each
+            // time it comes back on its visualTree is re-instantiated from
+            // the UXML defaults — so we must drive card visibility from our
+            // state flags, not from the freshly-built defaults.
             if (_intro != null)
             {
-                _intro.style.opacity = 1f;
-                _intro.style.display = DisplayStyle.Flex;
+                bool showIntro = !_started;
+                _intro.style.opacity = showIntro ? 1f : 0f;
+                _intro.style.display = showIntro ? DisplayStyle.Flex : DisplayStyle.None;
             }
-            if (_outro != null)
+            if (_outro != null && !_outroShowing)
             {
                 _outro.style.opacity = 0f;
                 _outro.style.display = DisplayStyle.None;
             }
 
-            // Let clicks pass through to the diegetic panel below. The
-            // intro/outro/archive cards themselves stay pickable (default
-            // PickingMode.Position) so they can still be clicked when
-            // visible. Input dismissal is driven by the Update poll.
             root.pickingMode = PickingMode.Ignore;
             foreach (var child in root.Children())
                 if (child != _intro && child != _outro) child.pickingMode = PickingMode.Ignore;
 
-            // Keyboard still goes through UI Toolkit as a backup.
-            root.focusable = true;
-            root.Focus();
-            root.RegisterCallback<KeyDownEvent>(OnAnyKey);
-
-            // Intro card itself is the clickable target while visible.
-            if (_intro != null) _intro.RegisterCallback<PointerDownEvent>(OnAnyClick);
+            if (!_started)
+            {
+                root.focusable = true;
+                root.Focus();
+                root.RegisterCallback<KeyDownEvent>(OnAnyKey);
+                if (_intro != null) _intro.RegisterCallback<PointerDownEvent>(OnAnyClick);
+            }
         }
 
         IEnumerator RetryCacheOverlay()
@@ -235,11 +237,10 @@ namespace SignalScrubber.Polish
         IEnumerator ShowOutro()
         {
             SetControlsInteractable(false);
+            _outroShowing = true;
 
-            // Bring the overlay back online so the outro can render.
             SetOverlayActive(true);
-            // rootVisualElement was rebuilt — re-cache references.
-            yield return null; // let UIDocument rebuild this frame
+            yield return null;
             CacheOverlay();
 
             yield return new WaitForSeconds(outroDelay);

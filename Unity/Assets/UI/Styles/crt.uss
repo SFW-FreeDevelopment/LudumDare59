@@ -46,6 +46,15 @@ TemplateContainer {
     align-self: center;
 }
 
+.signal-strength {
+    color: var(--ss-amber);
+    font-size: 11px;
+    letter-spacing: 3px;
+    -unity-text-align: middle-center;
+    margin-top: 6px;
+    align-self: center;
+}
+
 .controls-row {
     flex-direction: row;
     justify-content: space-around;

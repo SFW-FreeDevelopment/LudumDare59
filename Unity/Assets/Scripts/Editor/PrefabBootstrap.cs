@@ -65,9 +65,11 @@ namespace SignalScrubber.EditorTools
             var screen     = crt.transform.Find("Screen")?.gameObject      ?? EnsureChild(crt, "Screen");
             var foreground = crt.transform.Find("Foreground")?.gameObject  ?? EnsureChild(crt, "Foreground");
 
-            // Body: FrameSprite + PowerLed (SpriteRenderer slots, null sprites).
-            EnsureSpriteSlot(body, "FrameSprite", localPos: new Vector3(0f, 0f, -0.01f),
+            // Body: FrameSprite + PowerLed (SpriteRenderer slots). FrameSprite
+            // auto-picks up the CRT-monitor art if the artist has dropped it in.
+            var frame = EnsureSpriteSlot(body, "FrameSprite", localPos: new Vector3(0f, 0f, -0.01f),
                              sortingOrder: 0, color: Color.white);
+            AutoAssignSprite(frame, "Assets/Art/CRT/CRT-monitor.png");
             var led = EnsureSpriteSlot(body, "PowerLed",
                                        localPos: new Vector3(3.2f, 2.2f, -0.02f),
                                        sortingOrder: 1,
@@ -200,11 +202,23 @@ namespace SignalScrubber.EditorTools
             go.transform.localPosition = localPos;
             if (go.transform.localScale == Vector3.zero)
                 go.transform.localScale = Vector3.one;
-            var sr = go.GetComponent<SpriteRenderer>() ?? go.AddComponent<SpriteRenderer>();
+            var existing = go.GetComponent<SpriteRenderer>();
+            var sr = existing != null ? existing : go.AddComponent<SpriteRenderer>();
             sr.sortingOrder = sortingOrder;
             sr.color = color;
             // Intentionally leave sr.sprite null — artist drops in.
             return go;
+        }
+
+        static void AutoAssignSprite(GameObject slot, string assetPath)
+        {
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+            if (sprite == null) return;
+            var sr = slot.GetComponent<SpriteRenderer>();
+            if (sr == null) return;
+            if (sr.sprite == sprite) return;
+            sr.sprite = sprite;
+            EditorUtility.SetDirty(sr);
         }
 
         static Mesh _quad;

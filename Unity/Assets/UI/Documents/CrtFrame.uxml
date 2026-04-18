@@ -9,6 +9,7 @@
 
         <ui:VisualElement class="signal-area">
             <ss:WaveformElement name="waveform" class="waveform" />
+            <ui:Label name="signal-strength" class="signal-strength" text="SIGNAL STRENGTH  — — %" />
         </ui:VisualElement>
 
         <ui:VisualElement name="controls-row" class="controls-row">

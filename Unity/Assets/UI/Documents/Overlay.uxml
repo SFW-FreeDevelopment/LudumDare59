@@ -13,8 +13,9 @@
 
         <ui:VisualElement name="intro" class="card">
             <ui:Label text="SIGNAL SCRUBBER" class="card-title" />
-            <ui:Label text="Tune. Listen. Archive what comes through." class="card-sub" />
-            <ui:Label text="[ click anywhere to begin ]" class="card-hint" />
+            <ui:Label text="Drag the knobs and slider until the signal steadies." class="card-sub" />
+            <ui:Label text="Watch SIGNAL STRENGTH climb. Press LOCK SIGNAL when it's close." class="card-sub" />
+            <ui:Label text="[ click or press any key to begin ]" class="card-hint" />
         </ui:VisualElement>
 
         <ui:VisualElement name="outro" class="card" style="opacity: 0; display: none">
