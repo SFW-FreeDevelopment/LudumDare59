@@ -120,8 +120,8 @@ TemplateContainer {
    indicator rotates around its own centre, which coincides with
    the centre of the parent ring. */
 .knob {
-    width: 112px;
-    height: 112px;
+    width: 84px;
+    height: 84px;
     background-image: url("project://database/Assets/Art/CRT/knob-background.png");
     -unity-background-scale-mode: scale-to-fit;
     background-color: rgba(0, 0, 0, 0);
@@ -130,10 +130,10 @@ TemplateContainer {
 
 .knob-indicator {
     position: absolute;
-    width: 56px;
-    height: 56px;
-    top: 28px;
-    left: 28px;
+    width: 42px;
+    height: 42px;
+    top: 21px;
+    left: 21px;
     background-image: url("project://database/Assets/Art/CRT/knob.png");
     -unity-background-scale-mode: scale-to-fit;
     background-color: rgba(0, 0, 0, 0);
