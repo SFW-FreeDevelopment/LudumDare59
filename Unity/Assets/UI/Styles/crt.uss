@@ -42,9 +42,9 @@ TemplateContainer {
    orthoSize 5.4 at 16:9. */
 .signal-area {
     position: absolute;
-    top: 28%;
-    left: 38%;
-    right: 38%;
+    top: 50.8%;
+    left: 42%;
+    right: 42%;
     height: 22%;
     align-items: center;
     justify-content: center;
