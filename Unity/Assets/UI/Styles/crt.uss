@@ -98,7 +98,7 @@ TemplateContainer {
    vertically so the slider reads as a proper fader. */
 #col-frequency.bezel-slider {
     position: absolute;
-    left: 24%;
+    left: 25.5%;
     top: 7%;
     width: 120px;
     height: 46%;
