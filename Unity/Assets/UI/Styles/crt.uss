@@ -57,12 +57,14 @@ TemplateContainer {
 }
 
 .signal-strength {
+    position: absolute;
+    top: -200px;
+    left: 0;
+    right: 0;
     color: var(--ss-amber);
     font-size: 15px;
     letter-spacing: 3px;
     -unity-text-align: middle-center;
-    margin-top: 8px;
-    align-self: center;
 }
 
 /* Controls sit on the bezel face below the screen, not at the window
