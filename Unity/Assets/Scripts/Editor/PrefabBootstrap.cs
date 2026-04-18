@@ -82,9 +82,9 @@ namespace SignalScrubber.EditorTools
                              ?? EnsureChild(screen, "ScreenQuad");
             screenQuad.transform.localPosition = new Vector3(0f, 0f, -0.1f);
             screenQuad.transform.localScale    = new Vector3(6.8f, 4.0f, 1f);
-            var mf = screenQuad.GetComponent<MeshFilter>() ?? screenQuad.AddComponent<MeshFilter>();
+            var mf = GetOrAdd<MeshFilter>(screenQuad);
             if (mf.sharedMesh == null) mf.sharedMesh = GetQuadMesh();
-            var mr = screenQuad.GetComponent<MeshRenderer>() ?? screenQuad.AddComponent<MeshRenderer>();
+            var mr = GetOrAdd<MeshRenderer>(screenQuad);
             mr.sharedMaterial = AssetDatabase.LoadAssetAtPath<Material>(CrtMaterialPath);
             mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             mr.receiveShadows = false;
@@ -193,6 +193,14 @@ namespace SignalScrubber.EditorTools
             var go = new GameObject(name);
             go.transform.SetParent(parent.transform, false);
             return go;
+        }
+
+        // Unity's "fake null" breaks `??` — use overloaded == which treats
+        // destroyed components as null.
+        static T GetOrAdd<T>(GameObject go) where T : Component
+        {
+            var c = go.GetComponent<T>();
+            return c != null ? c : go.AddComponent<T>();
         }
 
         static GameObject EnsureSpriteSlot(GameObject parent, string name,

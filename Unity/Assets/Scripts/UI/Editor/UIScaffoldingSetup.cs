@@ -120,7 +120,8 @@ namespace SignalScrubber.UI.Editor
             GameObject go = existing != null ? existing.gameObject : new GameObject(childName);
             if (existing == null) go.transform.SetParent(parent.transform, false);
 
-            var doc = go.GetComponent<UIDocument>() ?? go.AddComponent<UIDocument>();
+            var existing2 = go.GetComponent<UIDocument>();
+            var doc = existing2 != null ? existing2 : go.AddComponent<UIDocument>();
             doc.panelSettings = panel;
             doc.visualTreeAsset = uxml;
             return go;

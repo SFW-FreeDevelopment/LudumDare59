@@ -116,7 +116,8 @@ namespace SignalScrubber.EditorTools
                 SceneManager.MoveGameObjectToScene(volGo, scene);
             }
 
-            var vol = volGo.GetComponent<Volume>() ?? volGo.AddComponent<Volume>();
+            var existingVol = volGo.GetComponent<Volume>();
+            var vol = existingVol != null ? existingVol : volGo.AddComponent<Volume>();
             vol.isGlobal = true;
             vol.priority = 0;
 
@@ -190,9 +191,11 @@ namespace SignalScrubber.EditorTools
                 : localPos;
             go.transform.localScale = new Vector3(size.x, size.y, 1f);
 
-            var mf = go.GetComponent<MeshFilter>() ?? go.AddComponent<MeshFilter>();
+            var existingMf = go.GetComponent<MeshFilter>();
+            var mf = existingMf != null ? existingMf : go.AddComponent<MeshFilter>();
             if (mf.sharedMesh == null) mf.sharedMesh = GetQuadMesh();
-            var mr = go.GetComponent<MeshRenderer>() ?? go.AddComponent<MeshRenderer>();
+            var existingMr = go.GetComponent<MeshRenderer>();
+            var mr = existingMr != null ? existingMr : go.AddComponent<MeshRenderer>();
             mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             mr.receiveShadows = false;
             mr.sharedMaterial = GetOrCreatePlaceholderMaterial(name, color);
