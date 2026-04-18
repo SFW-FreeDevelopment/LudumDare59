@@ -85,7 +85,7 @@ TemplateContainer {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 96px;
+    width: 120px;
 }
 
 .lock-column {
@@ -114,27 +114,26 @@ TemplateContainer {
     border-radius: 2px;
 }
 
-/* Knob — background-image is the static ring/plate and the rotating
-   child indicator uses the knob art itself, sized larger than its
-   parent so it overflows the background ring and reads clearly at
-   a glance. The indicator rotates around its own centre, which
-   coincides with the centre of the parent ring. */
+/* Knob — the static background ring is the larger outer element;
+   the rotating indicator sits centred inside it at a smaller size.
+   Both images scale-to-fit so their aspect is preserved. The
+   indicator rotates around its own centre, which coincides with
+   the centre of the parent ring. */
 .knob {
-    width: 80px;
-    height: 80px;
+    width: 112px;
+    height: 112px;
     background-image: url("project://database/Assets/Art/CRT/knob-background.png");
     -unity-background-scale-mode: scale-to-fit;
     background-color: rgba(0, 0, 0, 0);
-    overflow: visible;
     cursor: link;
 }
 
 .knob-indicator {
     position: absolute;
-    width: 108px;
-    height: 108px;
-    top: -14px;
-    left: -14px;
+    width: 72px;
+    height: 72px;
+    top: 20px;
+    left: 20px;
     background-image: url("project://database/Assets/Art/CRT/knob.png");
     -unity-background-scale-mode: scale-to-fit;
     background-color: rgba(0, 0, 0, 0);
