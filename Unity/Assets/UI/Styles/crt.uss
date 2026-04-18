@@ -66,27 +66,32 @@ TemplateContainer {
 }
 
 /* Controls sit on the bezel face below the screen, not at the window
-   edge — room below is reserved for the desk / keyboard art.
-   Horizontal span is constrained to the monitor frame width and the
-   row is positioned high enough that the tallest column still clears
-   the bottom edge of the bezel. */
+   edge — room below is reserved for the desk / keyboard art. The row
+   spans the full panel width; each column is absolutely positioned
+   by its own #col-* rule so controls can align independently with
+   the irregular slot layout in the CRT bezel art. */
 .controls-row {
     position: absolute;
-    top: 68%;
-    left: 24%;
-    right: 24%;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    top: 64%;
+    left: 0;
+    right: 0;
     height: 90px;
 }
 
 .control-column {
+    position: absolute;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     width: 120px;
+    /* Column's x-centre = left + 60. Targets below express the
+       intended centre position and subtract 60/viewport-width. */
 }
+
+#col-frequency { left: 23%; }
+#col-noise     { left: 31%; }
+#col-lock      { left: 57%; }
+#col-phase     { left: 67%; }
 
 .lock-column {
     justify-content: center;

@@ -13,22 +13,22 @@
         </ui:VisualElement>
 
         <ui:VisualElement name="controls-row" class="controls-row">
-            <ui:VisualElement class="control-column">
+            <ui:VisualElement name="col-frequency" class="control-column">
                 <ui:Slider name="frequency" class="freq-slider" direction="Vertical"
                            low-value="0" high-value="1" value="0.5" />
                 <ui:Label text="FREQUENCY" class="crt-label" />
             </ui:VisualElement>
 
-            <ui:VisualElement class="control-column">
+            <ui:VisualElement name="col-noise" class="control-column">
                 <ss:KnobElement name="noise" class="knob" />
                 <ui:Label text="NOISE FILTER" class="crt-label" />
             </ui:VisualElement>
 
-            <ui:VisualElement class="control-column lock-column">
+            <ui:VisualElement name="col-lock" class="control-column lock-column">
                 <ui:Button name="lock" class="lock-button" text="LOCK SIGNAL" />
             </ui:VisualElement>
 
-            <ui:VisualElement class="control-column">
+            <ui:VisualElement name="col-phase" class="control-column">
                 <ss:KnobElement name="phase" class="knob" />
                 <ui:Label text="PHASE ADJUST" class="crt-label" />
             </ui:VisualElement>
