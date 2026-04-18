@@ -32,15 +32,46 @@ namespace SignalScrubber.Core
         public event Action<SignalData, LockOutcome, float> OnSignalLocked;
         public event Action OnRunCompleted;
 
+        bool _runCompleted;
+
         void OnEnable()
         {
             if (frame != null) frame.OnLockPressed += HandleLock;
-            if (Count > 0) StartSignal(0);
         }
 
         void OnDisable()
         {
             if (frame != null) frame.OnLockPressed -= HandleLock;
+        }
+
+        /// <summary>
+        /// Starts the first signal. Called explicitly by the intro flow
+        /// (S16) so the CRT can be "idle static" under the intro card
+        /// before the player begins tuning.
+        /// </summary>
+        public void Begin()
+        {
+            _runCompleted = false;
+            if (Count > 0) StartSignal(0);
+        }
+
+        /// <summary>
+        /// Called by the lock-feedback coroutine once its visual/audio
+        /// transition has played out. Advances to the next signal or
+        /// emits OnRunCompleted.
+        /// </summary>
+        public void Advance()
+        {
+            if (_runCompleted) return;
+            if (_index + 1 >= signals.Length)
+            {
+                _runCompleted = true;
+                OnRunCompleted?.Invoke();
+            }
+            else
+            {
+                StartSignal(_index + 1);
+            }
         }
 
         void StartSignal(int i)
@@ -51,7 +82,7 @@ namespace SignalScrubber.Core
 
         void HandleLock()
         {
-            if (!IsValidIndex) return;
+            if (!IsValidIndex || _runCompleted) return;
 
             float clarity = SignalEvaluator.Clarity(tuning, Current);
             LockOutcome outcome =
@@ -60,9 +91,8 @@ namespace SignalScrubber.Core
                                               LockOutcome.Fail;
 
             OnSignalLocked?.Invoke(Current, outcome, clarity);
-
-            if (_index + 1 >= signals.Length) OnRunCompleted?.Invoke();
-            else StartSignal(_index + 1);
+            // Advance is deferred: LockFlash (S15) calls Advance() once
+            // its transition completes so visuals can linger on the lock.
         }
     }
 }

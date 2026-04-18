@@ -44,3 +44,41 @@
     letter-spacing: 2px;
     -unity-text-align: middle-center;
 }
+
+/* Archive card — briefly shown on a successful lock (S15). */
+.archive-card {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    translate: -50% 0;
+    width: 600px;
+    padding: 24px 28px;
+    background-color: rgba(11, 15, 10, 0.85);
+    border-color: var(--ss-dim);
+    border-width: 1px;
+    border-radius: 4px;
+    align-items: center;
+    flex-direction: column;
+    transition-property: opacity;
+    transition-duration: 0.35s;
+}
+
+.archive-title {
+    color: var(--ss-phosphor);
+    font-size: 18px;
+    letter-spacing: 6px;
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+}
+
+.archive-body {
+    color: var(--ss-cream);
+    font-size: 14px;
+    -unity-font-style: italic;
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.archive-card--dim {
+    opacity: 0.55;
+}

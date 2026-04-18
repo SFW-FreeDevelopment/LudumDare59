@@ -96,6 +96,18 @@ namespace SignalScrubber.EditorTools
                 if (ledSr != null) SetSerializedReference(flicker, "powerLed", ledSr);
             }
 
+            // LockFlash on Systems/LockFlash, bridging SignalManager,
+            // CrtMaterialBinder, and the overlay UIDocument.
+            var lockFlash = EnsureChildComponent<LockFlash>(systems, "LockFlash");
+            SetSerializedReference(lockFlash, "manager", manager);
+            if (binder != null) SetSerializedReference(lockFlash, "binder", binder);
+            var overlayGo = FindInScene("UI/OverlayUI");
+            if (overlayGo != null)
+            {
+                var overlayDoc = overlayGo.GetComponent<UnityEngine.UIElements.UIDocument>();
+                if (overlayDoc != null) SetSerializedReference(lockFlash, "overlayDocument", overlayDoc);
+            }
+
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
             Debug.Log("[SignalScrubber] Systems wired.");
