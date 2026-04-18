@@ -2,6 +2,9 @@ using System.Collections;
 using SignalScrubber.Core;
 using UnityEngine;
 using UnityEngine.UIElements;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace SignalScrubber.Polish
 {
@@ -27,8 +30,8 @@ namespace SignalScrubber.Polish
 
         VisualElement _intro;
         VisualElement _outro;
-
         VisualElement _overlayRoot;
+        bool _dismissing;
 
         void OnEnable()
         {
@@ -46,6 +49,31 @@ namespace SignalScrubber.Polish
         // OnEnable is unreliable here because component init order between
         // UIDocument and this script is not guaranteed.
         void Start() => CacheOverlay();
+
+        void Update()
+        {
+            if (_intro == null || _intro.style.display == DisplayStyle.None) return;
+            if (PollDismissInput()) OnAnyClick(null);
+        }
+
+        static bool PollDismissInput()
+        {
+#if ENABLE_INPUT_SYSTEM
+            var kb = Keyboard.current;
+            if (kb != null && (kb.spaceKey.wasPressedThisFrame
+                               || kb.enterKey.wasPressedThisFrame
+                               || kb.anyKey.wasPressedThisFrame))
+                return true;
+            var mouse = Mouse.current;
+            if (mouse != null && mouse.leftButton.wasPressedThisFrame)
+                return true;
+#endif
+#if ENABLE_LEGACY_INPUT_MANAGER
+            if (Input.anyKeyDown || Input.GetMouseButtonDown(0))
+                return true;
+#endif
+            return false;
+        }
 
         void CacheOverlay()
         {
@@ -94,8 +122,13 @@ namespace SignalScrubber.Polish
 
         void OnAnyClick(PointerDownEvent _)
         {
-            if (_intro == null || _intro.style.display == DisplayStyle.None) return;
-            if (_overlayRoot != null) _overlayRoot.UnregisterCallback<PointerDownEvent>(OnAnyClick);
+            if (_dismissing || _intro == null || _intro.style.display == DisplayStyle.None) return;
+            _dismissing = true;
+            if (_overlayRoot != null)
+            {
+                _overlayRoot.UnregisterCallback<PointerDownEvent>(OnAnyClick);
+                _overlayRoot.UnregisterCallback<KeyDownEvent>(OnAnyKey);
+            }
             StartCoroutine(DismissIntroThenBegin());
         }
 
