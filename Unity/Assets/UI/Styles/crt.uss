@@ -91,7 +91,7 @@ TemplateContainer {
 #col-noise     { left: 29.5%; }
 #col-noise > .knob { scale: 1.9 1.9; }
 
-#col-lock      { left: 43.5%; width: 240px; top: 60px; }
+#col-lock      { left: 43.2%; width: 230px; top: 52px; }
 
 #col-phase     { left: 64.5%; }
 #col-phase > .knob { scale: 1.9 1.9; }
