@@ -90,8 +90,11 @@ namespace SignalScrubber.UI.Editor
             var overlayUxml   = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(OverlayUxmlPath);
 
             var uiRoot = FindOrCreateRoot(scene, "UI");
-            EnsureUIDocumentChild(uiRoot, "DiegeticUI", diegeticPanel, crtFrameUxml);
+            var diegetic = EnsureUIDocumentChild(uiRoot, "DiegeticUI", diegeticPanel, crtFrameUxml);
             EnsureUIDocumentChild(uiRoot, "OverlayUI",  overlayPanel,  overlayUxml);
+
+            if (diegetic.GetComponent<CrtFrameController>() == null)
+                diegetic.AddComponent<CrtFrameController>();
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
@@ -108,7 +111,7 @@ namespace SignalScrubber.UI.Editor
             return root;
         }
 
-        static void EnsureUIDocumentChild(GameObject parent, string childName,
+        static GameObject EnsureUIDocumentChild(GameObject parent, string childName,
             PanelSettings panel, VisualTreeAsset uxml)
         {
             var existing = parent.transform.Find(childName);
@@ -118,6 +121,7 @@ namespace SignalScrubber.UI.Editor
             var doc = go.GetComponent<UIDocument>() ?? go.AddComponent<UIDocument>();
             doc.panelSettings = panel;
             doc.visualTreeAsset = uxml;
+            return go;
         }
     }
 }

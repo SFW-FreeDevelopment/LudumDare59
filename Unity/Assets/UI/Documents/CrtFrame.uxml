@@ -1,16 +1,37 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements"
          xmlns:uie="UnityEditor.UIElements"
+         xmlns:ss="SignalScrubber.UI"
          editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Styles/crt.uss" />
 
     <ui:VisualElement class="crt-panel">
         <ui:Label text="TUNE THE SIGNAL" class="crt-title" />
+
         <ui:VisualElement class="signal-area">
             <!-- S12 replaces this placeholder with a WaveformElement. -->
-            <ui:VisualElement name="waveform" />
+            <ui:VisualElement name="waveform" class="waveform" />
         </ui:VisualElement>
+
         <ui:VisualElement name="controls-row" class="controls-row">
-            <!-- S05 populates this row with slider, knobs, and Lock button. -->
+            <ui:VisualElement class="control-column">
+                <ui:Slider name="frequency" class="freq-slider" direction="Vertical"
+                           low-value="0" high-value="1" value="0.5" />
+                <ui:Label text="FREQUENCY" class="crt-label" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="control-column">
+                <ss:KnobElement name="noise" class="knob" />
+                <ui:Label text="NOISE FILTER" class="crt-label" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="control-column lock-column">
+                <ui:Button name="lock" class="lock-button" text="LOCK SIGNAL" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="control-column">
+                <ss:KnobElement name="phase" class="knob" />
+                <ui:Label text="PHASE ADJUST" class="crt-label" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -26,11 +26,16 @@
     margin-top: 6px;
 }
 
-/* Populated by later stories (S05, S12). */
 .signal-area {
     flex-grow: 1;
     align-items: center;
     justify-content: center;
+}
+
+.waveform {
+    height: 60px;
+    width: 70%;
+    align-self: center;
 }
 
 .controls-row {
@@ -38,4 +43,80 @@
     justify-content: space-around;
     align-items: flex-start;
     height: 140px;
+}
+
+.control-column {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 96px;
+}
+
+.lock-column {
+    justify-content: center;
+    height: 100%;
+}
+
+/* Slider reskin. */
+.freq-slider {
+    width: 40px;
+    height: 110px;
+    --unity-metrics-default-border_radius: 2px;
+}
+.freq-slider > .unity-base-slider__input {
+    background-color: var(--ss-panel);
+    border-color: var(--ss-dim);
+    border-width: 1px;
+    border-radius: 2px;
+}
+.freq-slider > .unity-base-slider__input > .unity-base-slider__dragger {
+    background-color: var(--ss-phosphor);
+    border-color: var(--ss-phosphor);
+    width: 28px;
+    height: 14px;
+    border-radius: 2px;
+}
+
+/* Knob. */
+.knob {
+    width: 80px;
+    height: 80px;
+    background-color: var(--ss-panel);
+    border-color: var(--ss-dim);
+    border-width: 2px;
+    border-radius: 40px;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 6px;
+    cursor: link;
+}
+
+.knob-indicator {
+    width: 6px;
+    height: 22px;
+    background-color: var(--ss-phosphor);
+    border-radius: 2px;
+    transform-origin: 50% 34px;
+}
+
+/* Lock button. */
+.lock-button {
+    width: 120px;
+    height: 54px;
+    background-color: var(--ss-panel);
+    border-color: var(--ss-amber);
+    border-width: 2px;
+    border-radius: 4px;
+    color: var(--ss-amber);
+    font-size: 14px;
+    letter-spacing: 3px;
+    -unity-text-align: middle-center;
+}
+.lock-button:hover {
+    color: var(--ss-phosphor);
+    border-color: var(--ss-phosphor);
+}
+.lock-button:active {
+    background-color: var(--ss-amber);
+    color: var(--ss-ink);
 }
