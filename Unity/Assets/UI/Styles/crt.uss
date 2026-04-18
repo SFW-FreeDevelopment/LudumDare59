@@ -88,10 +88,10 @@ TemplateContainer {
        intended centre position and subtract 60/viewport-width. */
 }
 
-#col-frequency { left: 26%; }
-#col-noise     { left: 34%; }
-#col-lock      { left: 60%; }
-#col-phase     { left: 67%; }
+#col-frequency { left: 24%; }
+#col-noise     { left: 32%; }
+#col-lock      { left: 61%; }
+#col-phase     { left: 68%; }
 
 .lock-column {
     justify-content: center;
