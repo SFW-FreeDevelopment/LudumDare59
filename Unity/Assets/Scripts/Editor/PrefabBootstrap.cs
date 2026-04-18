@@ -131,6 +131,7 @@ namespace SignalScrubber.EditorTools
                 color: Color.white);
             if (!n1Existed) note1.transform.localScale = Vector3.one;
             AutoAssignSprite(note1, "Assets/Art/CRT/sticky-note-1.png");
+            AddStickyNoteText(note1, "it's closer\nthan you think");
 
             bool n2Existed = notes.transform.Find("StickyNote2") != null;
             var note2 = EnsureSpriteSlot(notes, "StickyNote2",
@@ -139,6 +140,52 @@ namespace SignalScrubber.EditorTools
                 color: Color.white);
             if (!n2Existed) note2.transform.localScale = Vector3.one;
             AutoAssignSprite(note2, "Assets/Art/CRT/sticky-note-2.png");
+            AddStickyNoteText(note2, "don't let\nit lock you");
+        }
+
+        const string JasonSharpiePath = "Assets/Fonts/JasonSharpie.ttf";
+
+        /// <summary>
+        /// Parents a TextMesh child under the sticky note so the note art
+        /// reads as a hand-scrawled message. Uses legacy TextMesh (not TMP)
+        /// so a raw TTF works without the SDF font-asset conversion step.
+        /// Font, material, and transform are seeded on first creation;
+        /// text is re-synced every run so code edits propagate.
+        /// </summary>
+        static void AddStickyNoteText(GameObject note, string text)
+        {
+            var go = EnsureChildTracked(note, "Text", out bool created);
+            if (created)
+            {
+                go.transform.localPosition = new Vector3(0f, 0f, -0.01f);
+                go.transform.localRotation = Quaternion.identity;
+                go.transform.localScale    = Vector3.one;
+            }
+
+            var tm = go.GetComponent<TextMesh>();
+            if (tm == null) tm = go.AddComponent<TextMesh>();
+
+            if (created)
+            {
+                var font = AssetDatabase.LoadAssetAtPath<Font>(JasonSharpiePath);
+                if (font != null)
+                {
+                    tm.font = font;
+                    var mr = go.GetComponent<MeshRenderer>();
+                    if (mr != null && font.material != null)
+                        mr.sharedMaterial = font.material;
+                }
+                tm.fontSize      = 64;
+                tm.characterSize = 0.015f;
+                tm.anchor        = TextAnchor.MiddleCenter;
+                tm.alignment     = TextAlignment.Center;
+                tm.color         = new Color(0.08f, 0.08f, 0.08f, 1f);
+
+                var meshRenderer = go.GetComponent<MeshRenderer>();
+                if (meshRenderer != null) meshRenderer.sortingOrder = 20;
+            }
+
+            tm.text = text;
         }
 
         static void RefineDesk(GameObject desk)
