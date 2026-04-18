@@ -18,7 +18,7 @@ namespace SignalScrubber.UI
         const int Detents = 20;
 
         [SerializeField] TuningState tuning;
-        [SerializeField] AudioDirector audio;
+        [SerializeField] AudioDirector audioDirector;
 
         public event Action OnLockPressed;
 
@@ -93,7 +93,7 @@ namespace SignalScrubber.UI
             int step = Mathf.RoundToInt(value * Detents);
             if (step == lastStep) return;
             lastStep = step;
-            if (audio != null) audio.Click();
+            if (audioDirector != null) audioDirector.Click();
         }
     }
 }

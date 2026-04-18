@@ -82,8 +82,8 @@ namespace SignalScrubber.EditorTools
             SetSerializedReference(audio, "signalTone", signalTone);
             SetSerializedReference(audio, "oneShot",    oneShot);
 
-            // CrtFrameController.audio -> AudioDirector (for detent clicks).
-            if (ctrl != null) SetSerializedReference(ctrl, "audio", audio);
+            // CrtFrameController.audioDirector -> AudioDirector (for detent clicks).
+            if (ctrl != null) SetSerializedReference(ctrl, "audioDirector", audio);
 
             // AmbientFlicker on Systems/AmbientFlicker, wired to the binder
             // and the PowerLed SpriteRenderer on the CRT body.
@@ -177,7 +177,9 @@ namespace SignalScrubber.EditorTools
             var t = parent.transform.Find(childName);
             GameObject go = t != null ? t.gameObject : new GameObject(childName);
             if (t == null) go.transform.SetParent(parent.transform, false);
-            return go.GetComponent<T>() ?? go.AddComponent<T>();
+            var existing = go.GetComponent<T>();
+            if (existing != null) return existing;
+            return go.AddComponent<T>();
         }
 
         static AudioSource EnsureAudioSource(GameObject parent, string childName,
