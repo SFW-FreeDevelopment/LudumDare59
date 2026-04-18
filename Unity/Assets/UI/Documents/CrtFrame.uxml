@@ -9,7 +9,10 @@
 
         <ui:VisualElement class="signal-area">
             <ss:WaveformElement name="waveform" class="waveform" />
-            <ui:Label name="signal-strength" class="signal-strength" text="SIGNAL STRENGTH  — — %" />
+            <ui:VisualElement name="signal-readout" class="signal-readout">
+                <ui:Label name="signal-strength-label" class="signal-strength-label" text="SIGNAL STRENGTH" />
+                <ui:Label name="signal-value" class="signal-value" text="-- %" />
+            </ui:VisualElement>
         </ui:VisualElement>
 
         <ui:VisualElement name="col-frequency" class="control-column bezel-slider">

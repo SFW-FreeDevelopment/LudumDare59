@@ -10,16 +10,35 @@
     --ss-dim:      rgba(127, 255, 158, 0.35);
 }
 
+/* ---------------------------------------------------------------------
+   FONT ROLES
+   Three distinct voices, one rule each — do not mix within an element:
+
+     screen   → VT323          on-CRT text, slight glow, all caps
+     hardware → Microgramma    panel labels, engraved, no glow
+     digit    → DS-DIGIT       numeric readouts only, sparse use
+   --------------------------------------------------------------------- */
+
+.font-screen {
+    -unity-font: url("project://database/Assets/Fonts/VT323-Regular.ttf");
+    -unity-font-definition: none;
+}
+
+.font-hardware {
+    -unity-font: url("project://database/Assets/Fonts/Microgramma D Extended Bold.otf");
+    -unity-font-definition: none;
+}
+
+.font-digit {
+    -unity-font: url("project://database/Assets/Fonts/DS-DIGIT.TTF");
+    -unity-font-definition: none;
+}
+
 .ss-text {
     color: var(--ss-phosphor);
     -unity-font-style: normal;
     -unity-text-align: middle-center;
 }
 
-.ss-amber {
-    color: var(--ss-amber);
-}
-
-.ss-cream {
-    color: var(--ss-cream);
-}
+.ss-amber { color: var(--ss-amber); }
+.ss-cream { color: var(--ss-cream); }

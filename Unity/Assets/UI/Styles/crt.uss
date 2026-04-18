@@ -18,18 +18,25 @@ TemplateContainer {
     background-color: rgba(0, 0, 0, 0);
 }
 
+/* Title lives on the CRT glass — VT323, phosphor glow, loose letters. */
 .crt-title {
     position: absolute;
     top: 7%;
     left: 0;
     right: 0;
+    -unity-font: url("project://database/Assets/Fonts/VT323-Regular.ttf");
+    -unity-font-definition: none;
     color: var(--ss-phosphor);
-    font-size: 20px;
-    letter-spacing: 4px;
+    font-size: 34px;
+    letter-spacing: 8px;
     -unity-text-align: middle-center;
+    text-shadow: 0 0 4px rgba(127, 255, 158, 0.75);
 }
 
+/* Hardware labels engraved on the bezel — Microgramma, tight, no glow. */
 .crt-label {
+    -unity-font: url("project://database/Assets/Fonts/Microgramma D Extended Bold.otf");
+    -unity-font-definition: none;
     color: var(--ss-amber);
     font-size: 11px;
     letter-spacing: 2px;
@@ -56,15 +63,37 @@ TemplateContainer {
     align-self: center;
 }
 
-.signal-strength {
+/* Readout wrapper — sits on the CRT glass above the waveform. */
+.signal-readout {
     position: absolute;
-    top: -200px;
+    top: -180px;
     left: 0;
     right: 0;
-    color: var(--ss-amber);
-    font-size: 15px;
-    letter-spacing: 3px;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* "SIGNAL STRENGTH" label feels like the computer printed it — VT323. */
+.signal-strength-label {
+    -unity-font: url("project://database/Assets/Fonts/VT323-Regular.ttf");
+    -unity-font-definition: none;
+    color: var(--ss-phosphor);
+    font-size: 18px;
+    letter-spacing: 4px;
     -unity-text-align: middle-center;
+    text-shadow: 0 0 3px rgba(127, 255, 158, 0.55);
+}
+
+/* Numeric reading — DS-DIGIT, amber, subtle glow, large. */
+.signal-value {
+    -unity-font: url("project://database/Assets/Fonts/DS-DIGIT.TTF");
+    -unity-font-definition: none;
+    color: var(--ss-amber);
+    font-size: 42px;
+    letter-spacing: 2px;
+    -unity-text-align: middle-center;
+    text-shadow: 0 0 2px rgba(255, 179, 92, 0.45);
+    margin-top: -4px;
 }
 
 /* Controls sit on the bezel face below the screen, not at the window
@@ -165,7 +194,7 @@ TemplateContainer {
     transform-origin: center;
 }
 
-/* Lock button. */
+/* Lock button — hardware, engraved Microgramma, no glow. */
 .lock-button {
     width: 240px;
     height: 54px;
@@ -173,9 +202,11 @@ TemplateContainer {
     border-color: var(--ss-amber);
     border-width: 2px;
     border-radius: 4px;
+    -unity-font: url("project://database/Assets/Fonts/Microgramma D Extended Bold.otf");
+    -unity-font-definition: none;
     color: var(--ss-amber);
-    font-size: 14px;
-    letter-spacing: 3px;
+    font-size: 16px;
+    letter-spacing: 4px;
     -unity-text-align: middle-center;
 }
 .lock-button:hover {

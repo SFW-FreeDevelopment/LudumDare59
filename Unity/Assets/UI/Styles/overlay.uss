@@ -42,27 +42,37 @@ TemplateContainer {
     flex-direction: column;
 }
 
+/* Cards read as CRT output — VT323 with phosphor glow across the board. */
 .card-title {
+    -unity-font: url("project://database/Assets/Fonts/VT323-Regular.ttf");
+    -unity-font-definition: none;
     color: var(--ss-phosphor);
-    font-size: 48px;
-    letter-spacing: 8px;
+    font-size: 72px;
+    letter-spacing: 10px;
     -unity-text-align: middle-center;
     margin-bottom: 16px;
+    text-shadow: 0 0 6px rgba(127, 255, 158, 0.65);
 }
 
 .card-sub {
+    -unity-font: url("project://database/Assets/Fonts/VT323-Regular.ttf");
+    -unity-font-definition: none;
     color: var(--ss-cream);
-    font-size: 16px;
-    -unity-font-style: italic;
+    font-size: 22px;
+    letter-spacing: 2px;
     -unity-text-align: middle-center;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
+    text-shadow: 0 0 3px rgba(232, 225, 200, 0.35);
 }
 
 .card-hint {
+    -unity-font: url("project://database/Assets/Fonts/VT323-Regular.ttf");
+    -unity-font-definition: none;
     color: var(--ss-amber);
-    font-size: 12px;
-    letter-spacing: 2px;
+    font-size: 18px;
+    letter-spacing: 3px;
     -unity-text-align: middle-center;
+    text-shadow: 0 0 3px rgba(255, 179, 92, 0.5);
 }
 
 /* Archive card — briefly shown on a successful lock (S15). */
@@ -83,20 +93,27 @@ TemplateContainer {
     transition-duration: 0.35s;
 }
 
+/* Archive card is CRT output — VT323 on both lines. */
 .archive-title {
+    -unity-font: url("project://database/Assets/Fonts/VT323-Regular.ttf");
+    -unity-font-definition: none;
     color: var(--ss-phosphor);
-    font-size: 18px;
+    font-size: 26px;
     letter-spacing: 6px;
     -unity-text-align: middle-center;
     margin-bottom: 8px;
+    text-shadow: 0 0 4px rgba(127, 255, 158, 0.6);
 }
 
 .archive-body {
+    -unity-font: url("project://database/Assets/Fonts/VT323-Regular.ttf");
+    -unity-font-definition: none;
     color: var(--ss-cream);
-    font-size: 14px;
-    -unity-font-style: italic;
+    font-size: 20px;
+    letter-spacing: 1px;
     -unity-text-align: middle-center;
     white-space: normal;
+    text-shadow: 0 0 3px rgba(232, 225, 200, 0.3);
 }
 
 .archive-card--dim {
