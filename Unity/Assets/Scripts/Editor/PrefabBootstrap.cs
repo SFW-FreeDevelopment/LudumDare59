@@ -1,4 +1,5 @@
 using System.IO;
+using SignalScrubber.Rendering;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -85,6 +86,9 @@ namespace SignalScrubber.EditorTools
             mr.sharedMaterial = AssetDatabase.LoadAssetAtPath<Material>(CrtMaterialPath);
             mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             mr.receiveShadows = false;
+
+            if (screenQuad.GetComponent<CrtMaterialBinder>() == null)
+                screenQuad.AddComponent<CrtMaterialBinder>();
 
             EnsureChild(screen, "DiegeticUIAnchor");
 

@@ -1,4 +1,5 @@
 using SignalScrubber.Core;
+using SignalScrubber.Rendering;
 using SignalScrubber.UI;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -45,6 +46,15 @@ namespace SignalScrubber.EditorTools
             SetSerializedReference(manager, "tuning", tuning);
             if (ctrl != null) SetSerializedReference(manager, "frame", ctrl);
             SetSerializedArray(manager, "signals", LoadAllSignals());
+
+            // SignalRenderer: needs TuningState, SignalManager, and the
+            // CrtMaterialBinder sitting on CRT/Screen/ScreenQuad.
+            var renderer = EnsureChildComponent<SignalRenderer>(systems, "SignalRenderer");
+            var screenQuad = FindInScene("World/CRT/Screen/ScreenQuad");
+            var binder = screenQuad != null ? screenQuad.GetComponent<CrtMaterialBinder>() : null;
+            SetSerializedReference(renderer, "tuning",  tuning);
+            SetSerializedReference(renderer, "manager", manager);
+            if (binder != null) SetSerializedReference(renderer, "binder", binder);
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
