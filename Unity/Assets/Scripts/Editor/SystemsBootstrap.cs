@@ -1,4 +1,5 @@
 using SignalScrubber.Core;
+using SignalScrubber.Polish;
 using SignalScrubber.Rendering;
 using SignalScrubber.UI;
 using UnityEditor;
@@ -65,6 +66,17 @@ namespace SignalScrubber.EditorTools
             {
                 var wave = diegetic.GetComponent<WaveformDriver>();
                 if (wave != null) SetSerializedReference(wave, "manager", manager);
+            }
+
+            // AmbientFlicker on Systems/AmbientFlicker, wired to the binder
+            // and the PowerLed SpriteRenderer on the CRT body.
+            var flicker = EnsureChildComponent<AmbientFlicker>(systems, "AmbientFlicker");
+            if (binder != null) SetSerializedReference(flicker, "binder", binder);
+            var led = FindInScene("World/CRT/Body/PowerLed");
+            if (led != null)
+            {
+                var ledSr = led.GetComponent<SpriteRenderer>();
+                if (ledSr != null) SetSerializedReference(flicker, "powerLed", ledSr);
             }
 
             EditorSceneManager.MarkSceneDirty(scene);
