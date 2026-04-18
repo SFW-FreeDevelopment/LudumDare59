@@ -27,6 +27,22 @@ Sprite art drops into subfolders here. Source files (.aseprite, .psd) live in `S
 
 Populated as stories land. Each row names a `SpriteRenderer` slot created by a story; the artist can drop the sprite into that slot.
 
-| Story | GameObject path                         | Slot                     | Notes |
-|-------|-----------------------------------------|--------------------------|-------|
-| _TBD_ | _added as stories create slots_         |                          |       |
+| Story | Prefab | GameObject path                       | Slot type      | Notes |
+|-------|--------|---------------------------------------|----------------|-------|
+| S04   | CRT    | `Body/FrameSprite`                    | SpriteRenderer | Full monitor shell, ~800×520 px |
+| S04   | CRT    | `Body/PowerLed`                       | SpriteRenderer | Small red dot, ~24×24 px, pre-tinted |
+| S04   | CRT    | `Foreground/Glass`                    | SpriteRenderer | Glass reflection/curvature overlay |
+| S04   | Desk   | `DeskSurface`                         | SpriteRenderer | Wide desk top, ~2000×400 px |
+| S04   | Desk   | `Clutter/Mug`                         | SpriteRenderer | Coffee mug |
+| S04   | Desk   | `Clutter/Keyboard`                    | SpriteRenderer | Retro keyboard |
+| S04   | Desk   | `Clutter/Papers`                      | SpriteRenderer | Loose scribbled notes |
+| S04   | Desk   | `Clutter/Tapes`                       | SpriteRenderer | VHS / cassette stack |
+| S04   | Desk   | `Clutter/StickyNotes`                 | SpriteRenderer | Stack or group of stickies |
+| S04   | Desk   | `Clutter/Books`                       | SpriteRenderer | Manuals / technical books |
+
+### Drop-in workflow
+
+1. Export the sprite into the matching `Assets/Art/<category>/` folder.
+2. Select the prefab (`Assets/Prefabs/CRT.prefab` or `Desk.prefab`).
+3. Drag the sprite onto the named `SpriteRenderer` slot's `Sprite` field.
+4. For clutter pieces, tweak the slot's local position and scale to taste — those transforms are placeholders.
