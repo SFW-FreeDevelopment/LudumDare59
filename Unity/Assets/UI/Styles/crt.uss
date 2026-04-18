@@ -20,7 +20,7 @@ TemplateContainer {
 
 .crt-title {
     position: absolute;
-    top: 13%;
+    top: 7%;
     left: 0;
     right: 0;
     color: var(--ss-phosphor);
@@ -42,10 +42,10 @@ TemplateContainer {
    orthoSize 5.4 at 16:9. */
 .signal-area {
     position: absolute;
-    top: 38%;
-    left: 35%;
-    right: 35%;
-    height: 22%;
+    top: 30%;
+    left: 32%;
+    right: 32%;
+    height: 26%;
     align-items: center;
     justify-content: center;
 }
@@ -66,16 +66,18 @@ TemplateContainer {
 }
 
 /* Controls sit on the bezel face below the screen, not at the window
-   edge — room below is reserved for the desk / keyboard art. */
+   edge — room below is reserved for the desk / keyboard art.
+   Horizontal span is constrained to the monitor frame width so the
+   outermost controls don't spill past the bezel edges. */
 .controls-row {
     position: absolute;
-    top: 72%;
-    left: 12%;
-    right: 12%;
+    top: 73%;
+    left: 22%;
+    right: 22%;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    height: 120px;
+    height: 110px;
 }
 
 .control-column {
