@@ -145,12 +145,28 @@ namespace SignalScrubber.EditorTools
 
         static void EnsureCrtMaterial()
         {
-            if (AssetDatabase.LoadAssetAtPath<Material>(CrtMaterialPath) != null) return;
-            EnsureDir(Path.GetDirectoryName(CrtMaterialPath));
-            var shader = Shader.Find("Universal Render Pipeline/Unlit");
-            var mat = new Material(shader) { name = "CRT" };
-            mat.SetColor("_BaseColor", new Color(0.03f, 0.08f, 0.04f, 1f));
-            AssetDatabase.CreateAsset(mat, CrtMaterialPath);
+            // Prefer the real CRT shader if it has imported; fall back to the
+            // URP/Unlit placeholder so the scene still renders pre-S10.
+            var crtShader = Shader.Find("SignalScrubber/CRT");
+            var shader = crtShader != null ? crtShader : Shader.Find("Universal Render Pipeline/Unlit");
+
+            var mat = AssetDatabase.LoadAssetAtPath<Material>(CrtMaterialPath);
+            if (mat == null)
+            {
+                EnsureDir(Path.GetDirectoryName(CrtMaterialPath));
+                mat = new Material(shader) { name = "CRT" };
+                mat.SetColor("_BaseColor", new Color(0.03f, 0.08f, 0.04f, 1f));
+                AssetDatabase.CreateAsset(mat, CrtMaterialPath);
+                return;
+            }
+
+            // Upgrade path: swap placeholder URP/Unlit for the real shader
+            // once it has imported.
+            if (mat.shader != shader)
+            {
+                mat.shader = shader;
+                EditorUtility.SetDirty(mat);
+            }
         }
 
         // ---------- helpers ----------
