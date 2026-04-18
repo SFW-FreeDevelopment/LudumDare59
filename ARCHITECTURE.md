@@ -70,12 +70,12 @@ Main
 
 Two `PanelSettings` assets, two `UIDocument` components:
 
-### DiegeticUI (`Assets/UI/Diegetic.panelsettings`)
+### DiegeticUI (`Assets/UI/Diegetic.asset`)
 - **Render Mode:** World Space, attached to the CRT GameObject.
 - **Scale Mode:** Constant Pixel Size, tuned so UXML pixels map 1:1 to the CRT bezel art.
 - Contains: the CRT frame labels ("TUNE THE SIGNAL", "FREQUENCY", etc.), the three controls (frequency slider, noise knob, phase knob), the Lock Signal button, the small waveform/status readouts. These all **live on the monitor frame**, not floating in front of the camera.
 
-### OverlayUI (`Assets/UI/Overlay.panelsettings`)
+### OverlayUI (`Assets/UI/Overlay.asset`)
 - **Render Mode:** Screen Space Overlay.
 - Contains: intro title card, outro card, final fade/vignette transitions, any debug readouts.
 
@@ -188,7 +188,7 @@ Assets/
 ├── UI/
 │   ├── Documents/      (.uxml)
 │   ├── Styles/         (.uss)
-│   └── *.panelsettings
+│   └── *.asset
 ├── Settings/           (URP, PostFx, InputActions)
 └── ScriptableObjects/
     └── Signals/        (SignalData assets)

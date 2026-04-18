@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Styles/crt.uss" />
+
+    <ui:VisualElement class="crt-panel">
+        <ui:Label text="TUNE THE SIGNAL" class="crt-title" />
+        <ui:VisualElement class="signal-area">
+            <!-- S12 replaces this placeholder with a WaveformElement. -->
+            <ui:VisualElement name="waveform" />
+        </ui:VisualElement>
+        <ui:VisualElement name="controls-row" class="controls-row">
+            <!-- S05 populates this row with slider, knobs, and Lock button. -->
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

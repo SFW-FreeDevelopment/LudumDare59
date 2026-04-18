@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements"
+         editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Styles/overlay.uss" />
+
+    <ui:VisualElement class="overlay-root">
+        <ui:VisualElement name="fade" />
+        <!-- S16 adds intro/outro cards; S15 adds the archive card. -->
+    </ui:VisualElement>
+</ui:UXML>

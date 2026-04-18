@@ -1,0 +1,25 @@
+/* Signal Scrubber shared theme. */
+
+:root {
+    --ss-phosphor: rgb(127, 255, 158);      /* CRT green */
+    --ss-amber:    rgb(255, 179, 92);       /* warning amber */
+    --ss-cream:    rgb(232, 225, 200);      /* paper / notes */
+    --ss-ink:      rgb(20, 22, 18);         /* dark text */
+    --ss-crt-bg:   rgb(11, 15, 10);         /* screen bg */
+    --ss-panel:    rgb(22, 26, 22);         /* frame panel */
+    --ss-dim:      rgba(127, 255, 158, 0.35);
+}
+
+.ss-text {
+    color: var(--ss-phosphor);
+    -unity-font-style: normal;
+    -unity-text-align: middle-center;
+}
+
+.ss-amber {
+    color: var(--ss-amber);
+}
+
+.ss-cream {
+    color: var(--ss-cream);
+}

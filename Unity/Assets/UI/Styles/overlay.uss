@@ -1,0 +1,46 @@
+@import url("theme.uss");
+
+/* Full-screen overlay root. */
+.overlay-root {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+}
+
+/* Fade / black card used for intro/outro in S16. */
+#fade {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.card {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.card-title {
+    color: var(--ss-phosphor);
+    font-size: 48px;
+    letter-spacing: 8px;
+    -unity-text-align: middle-center;
+    margin-bottom: 16px;
+}
+
+.card-sub {
+    color: var(--ss-cream);
+    font-size: 16px;
+    -unity-font-style: italic;
+    -unity-text-align: middle-center;
+    margin-bottom: 24px;
+}
+
+.card-hint {
+    color: var(--ss-amber);
+    font-size: 12px;
+    letter-spacing: 2px;
+    -unity-text-align: middle-center;
+}
