@@ -132,7 +132,7 @@ TemplateContainer {
     position: absolute;
     width: 42px;
     height: 42px;
-    top: 21px;
+    top: 27px;
     left: 21px;
     background-image: url("project://database/Assets/Art/CRT/knob.png");
     -unity-background-scale-mode: scale-to-fit;
