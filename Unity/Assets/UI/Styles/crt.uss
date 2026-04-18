@@ -130,10 +130,10 @@ TemplateContainer {
 
 .knob-indicator {
     position: absolute;
-    width: 88px;
-    height: 88px;
-    top: 12px;
-    left: 12px;
+    width: 56px;
+    height: 56px;
+    top: 28px;
+    left: 28px;
     background-image: url("project://database/Assets/Art/CRT/knob.png");
     -unity-background-scale-mode: scale-to-fit;
     background-color: rgba(0, 0, 0, 0);
