@@ -8,8 +8,7 @@
         <ui:Label text="TUNE THE SIGNAL" class="crt-title" />
 
         <ui:VisualElement class="signal-area">
-            <!-- S12 replaces this placeholder with a WaveformElement. -->
-            <ui:VisualElement name="waveform" class="waveform" />
+            <ss:WaveformElement name="waveform" class="waveform" />
         </ui:VisualElement>
 
         <ui:VisualElement name="controls-row" class="controls-row">

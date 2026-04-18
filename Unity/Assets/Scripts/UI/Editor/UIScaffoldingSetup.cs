@@ -95,6 +95,8 @@ namespace SignalScrubber.UI.Editor
 
             if (diegetic.GetComponent<CrtFrameController>() == null)
                 diegetic.AddComponent<CrtFrameController>();
+            if (diegetic.GetComponent<WaveformDriver>() == null)
+                diegetic.AddComponent<WaveformDriver>();
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);

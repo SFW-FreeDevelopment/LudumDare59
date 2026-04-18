@@ -37,6 +37,10 @@ namespace SignalScrubber.EditorTools
                 ctrl = diegetic.GetComponent<CrtFrameController>();
                 if (ctrl != null)
                     SetSerializedReference(ctrl, "tuning", tuning);
+
+                var waveform = diegetic.GetComponent<WaveformDriver>();
+                if (waveform != null)
+                    SetSerializedReference(waveform, "tuning", tuning);
             }
 
             // SignalManager (+ DebugSignalLogger) on its own child, with wired refs.
@@ -55,6 +59,13 @@ namespace SignalScrubber.EditorTools
             SetSerializedReference(renderer, "tuning",  tuning);
             SetSerializedReference(renderer, "manager", manager);
             if (binder != null) SetSerializedReference(renderer, "binder", binder);
+
+            // WaveformDriver.manager -> SignalManager (tuning set above).
+            if (diegetic != null)
+            {
+                var wave = diegetic.GetComponent<WaveformDriver>();
+                if (wave != null) SetSerializedReference(wave, "manager", manager);
+            }
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
