@@ -91,7 +91,7 @@ TemplateContainer {
 #col-noise     { left: 29.5%; }
 #col-noise > .knob { scale: 1.9 1.9; }
 
-#col-lock      { left: 45%; width: 160px; }
+#col-lock      { left: 44%; width: 200px; top: 24px; }
 
 #col-phase     { left: 64.5%; }
 #col-phase > .knob { scale: 1.9 1.9; }
@@ -164,7 +164,7 @@ TemplateContainer {
 
 /* Lock button. */
 .lock-button {
-    width: 160px;
+    width: 200px;
     height: 54px;
     background-color: var(--ss-panel);
     border-color: var(--ss-amber);
