@@ -42,7 +42,7 @@ TemplateContainer {
    orthoSize 5.4 at 16:9. */
 .signal-area {
     position: absolute;
-    top: 50.8%;
+    top: 48.8%;
     left: 42%;
     right: 42%;
     height: 22%;
