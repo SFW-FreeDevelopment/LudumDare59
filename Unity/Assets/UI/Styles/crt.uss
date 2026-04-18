@@ -99,7 +99,7 @@ TemplateContainer {
 #col-frequency.bezel-slider {
     position: absolute;
     left: 25%;
-    top: 16%;
+    top: 10%;
     width: 120px;
     height: 46%;
     align-items: center;
