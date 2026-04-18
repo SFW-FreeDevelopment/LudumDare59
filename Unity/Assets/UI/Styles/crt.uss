@@ -115,23 +115,26 @@ TemplateContainer {
 }
 
 /* Knob — background-image is the static ring/plate and the rotating
-   child indicator uses the knob art itself, centered and scaled to
-   match. The whole stack rotates around the element centre. */
+   child indicator uses the knob art itself, sized larger than its
+   parent so it overflows the background ring and reads clearly at
+   a glance. The indicator rotates around its own centre, which
+   coincides with the centre of the parent ring. */
 .knob {
     width: 80px;
     height: 80px;
     background-image: url("project://database/Assets/Art/CRT/knob-background.png");
     -unity-background-scale-mode: scale-to-fit;
     background-color: rgba(0, 0, 0, 0);
+    overflow: visible;
     cursor: link;
 }
 
 .knob-indicator {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    width: 108px;
+    height: 108px;
+    top: -14px;
+    left: -14px;
     background-image: url("project://database/Assets/Art/CRT/knob.png");
     -unity-background-scale-mode: scale-to-fit;
     background-color: rgba(0, 0, 0, 0);
