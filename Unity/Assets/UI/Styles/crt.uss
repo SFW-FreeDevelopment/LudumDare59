@@ -1,5 +1,13 @@
 @import url("theme.uss");
 
+/* UIDocument wraps the UXML in a TemplateContainer — force it to fill the
+   panel so the frame sizes correctly in screen-space layouts. */
+TemplateContainer {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+}
+
 /* Root frame rendered inside the CRT bezel. */
 .crt-panel {
     flex-grow: 1;

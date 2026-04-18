@@ -1,9 +1,18 @@
 @import url("theme.uss");
 
-/* Full-screen overlay root. */
+/* UIDocument wraps the UXML tree in a TemplateContainer. By default that
+   container hugs content — force it to fill the panel so our absolutely
+   positioned children (cards, fade) get a full-screen positioning parent. */
+TemplateContainer {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+}
+
 .overlay-root {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
 }
 
 /* Fade / black card used for intro/outro in S16. */
