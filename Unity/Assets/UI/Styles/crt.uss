@@ -42,10 +42,10 @@ TemplateContainer {
    orthoSize 5.4 at 16:9. */
 .signal-area {
     position: absolute;
-    top: 30%;
-    left: 32%;
-    right: 32%;
-    height: 26%;
+    top: 28%;
+    left: 34%;
+    right: 34%;
+    height: 22%;
     align-items: center;
     justify-content: center;
 }
@@ -58,7 +58,7 @@ TemplateContainer {
 
 .signal-strength {
     color: var(--ss-amber);
-    font-size: 13px;
+    font-size: 15px;
     letter-spacing: 3px;
     -unity-text-align: middle-center;
     margin-top: 8px;
@@ -67,17 +67,18 @@ TemplateContainer {
 
 /* Controls sit on the bezel face below the screen, not at the window
    edge — room below is reserved for the desk / keyboard art.
-   Horizontal span is constrained to the monitor frame width so the
-   outermost controls don't spill past the bezel edges. */
+   Horizontal span is constrained to the monitor frame width and the
+   row is positioned high enough that the tallest column still clears
+   the bottom edge of the bezel. */
 .controls-row {
     position: absolute;
-    top: 73%;
+    top: 70%;
     left: 22%;
     right: 22%;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    height: 110px;
+    height: 90px;
 }
 
 .control-column {
@@ -92,10 +93,11 @@ TemplateContainer {
     height: 100%;
 }
 
-/* Slider reskin. */
+/* Slider reskin. Matched in height to the knob elements (80px) so all
+   four controls read as a single horizontal row inside the bezel. */
 .freq-slider {
     width: 40px;
-    height: 110px;
+    height: 80px;
     --unity-metrics-default-border_radius: 2px;
 }
 .freq-slider > .unity-base-slider__input {
