@@ -75,6 +75,12 @@ namespace SignalScrubber.EditorTools
             var screen     = EnsureChild(crt, "Screen");
             var foreground = EnsureChild(crt, "Foreground");
 
+            // Shift the whole CRT up and scale it so it dominates the upper
+            // two-thirds of the view and leaves clear space at the bottom
+            // for the desk / keyboard art.
+            crt.transform.localPosition = new Vector3(0f, 1.0f, 0f);
+            crt.transform.localScale    = new Vector3(1.4f, 1.4f, 1f);
+
             // Placeholder plates. Z-layering matches ARCHITECTURE.md.
             EnsurePlate(bg,   "BackgroundPlate", new Color(0.06f, 0.07f, 0.08f),
                         size: new Vector2(20f, 12f), localZ: 2f);

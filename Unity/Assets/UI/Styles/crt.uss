@@ -8,24 +8,25 @@ TemplateContainer {
     height: 100%;
 }
 
-/* Root frame rendered inside the CRT bezel. Background is transparent so
-   the world-space CRT monitor art (and desk, when it lands) remains
-   visible as the environmental border around the gameplay. */
+/* Root frame rendered inside the CRT bezel. The background is transparent
+   so the world-space CRT monitor art remains visible as the environmental
+   border. Children are absolutely positioned to sit *within* the CRT
+   screen area (signal-area + title) or on the bezel's lower face
+   (controls-row), rather than flex-flowing the full viewport. */
 .crt-panel {
     flex-grow: 1;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: space-between;
-    padding: 12px 16px;
     background-color: rgba(0, 0, 0, 0);
 }
 
 .crt-title {
+    position: absolute;
+    top: 13%;
+    left: 0;
+    right: 0;
     color: var(--ss-phosphor);
-    font-size: 22px;
+    font-size: 20px;
     letter-spacing: 4px;
     -unity-text-align: middle-center;
-    margin-bottom: 6px;
 }
 
 .crt-label {
@@ -33,35 +34,48 @@ TemplateContainer {
     font-size: 11px;
     letter-spacing: 2px;
     -unity-text-align: middle-center;
-    margin-top: 6px;
+    margin-top: 4px;
 }
 
+/* Sized and positioned to align with the CRT screen area inside the
+   monitor art. Values were tuned against CRT scale 1.4 / Y +1.0 with
+   orthoSize 5.4 at 16:9. */
 .signal-area {
-    flex-grow: 1;
+    position: absolute;
+    top: 38%;
+    left: 35%;
+    right: 35%;
+    height: 22%;
     align-items: center;
     justify-content: center;
 }
 
 .waveform {
-    height: 60px;
-    width: 70%;
+    width: 100%;
+    height: 60%;
     align-self: center;
 }
 
 .signal-strength {
     color: var(--ss-amber);
-    font-size: 11px;
+    font-size: 13px;
     letter-spacing: 3px;
     -unity-text-align: middle-center;
-    margin-top: 6px;
+    margin-top: 8px;
     align-self: center;
 }
 
+/* Controls sit on the bezel face below the screen, not at the window
+   edge — room below is reserved for the desk / keyboard art. */
 .controls-row {
+    position: absolute;
+    top: 72%;
+    left: 12%;
+    right: 12%;
     flex-direction: row;
     justify-content: space-around;
-    align-items: flex-start;
-    height: 140px;
+    align-items: center;
+    height: 120px;
 }
 
 .control-column {
