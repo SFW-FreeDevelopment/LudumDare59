@@ -93,7 +93,7 @@ TemplateContainer {
 
 #col-lock      { left: 43.2%; width: 230px; top: 52px; }
 
-#col-phase     { left: 64.5%; }
+#col-phase     { left: 63.7%; }
 #col-phase > .knob { scale: 1.9 1.9; }
 
 /* FREQUENCY column lives on the CRT's left bezel rather than in the
