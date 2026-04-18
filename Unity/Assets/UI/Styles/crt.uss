@@ -197,14 +197,17 @@ TemplateContainer {
     transform-origin: center;
 }
 
-/* Lock button — hardware, engraved Microgramma, no glow. */
+/* Lock button — hardware plate rendered from lock-signal-1 art with
+   the engraved Microgramma label on top. Border/fill come from the
+   image, so no CSS border is drawn; hover / active tint the text. */
 .lock-button {
     width: 240px;
     height: 54px;
-    background-color: var(--ss-panel);
-    border-color: var(--ss-amber);
-    border-width: 2px;
-    border-radius: 4px;
+    background-image: url("project://database/Assets/Art/CRT/lock-signal-1.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 0;
     -unity-font: url("project://database/Assets/Fonts/Microgramma D Extended Bold.otf");
     -unity-font-definition: none;
     color: var(--ss-amber);
@@ -214,9 +217,8 @@ TemplateContainer {
 }
 .lock-button:hover {
     color: var(--ss-phosphor);
-    border-color: var(--ss-phosphor);
 }
 .lock-button:active {
-    background-color: var(--ss-amber);
+    background-image: url("project://database/Assets/Art/CRT/lock-signal-2.png");
     color: var(--ss-ink);
 }
