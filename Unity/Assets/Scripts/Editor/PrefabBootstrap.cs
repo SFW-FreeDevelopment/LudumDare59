@@ -268,12 +268,28 @@ namespace SignalScrubber.EditorTools
         static void AutoAssignSprite(GameObject slot, string assetPath)
         {
             var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
-            if (sprite == null) return;
+            if (sprite == null)
+            {
+                // Unity imports PNGs in Multiple sprite mode with no primary
+                // sprite, so LoadAssetAtPath<Sprite> returns null. Fall back
+                // to walking all sub-assets and grabbing the first Sprite.
+                var all = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+                foreach (var obj in all)
+                {
+                    if (obj is Sprite s) { sprite = s; break; }
+                }
+            }
+            if (sprite == null)
+            {
+                Debug.LogWarning($"[SignalScrubber] AutoAssignSprite: no Sprite found at {assetPath} (is textureType set to Sprite?)");
+                return;
+            }
             var sr = slot.GetComponent<SpriteRenderer>();
             if (sr == null) return;
             if (sr.sprite == sprite) return;
             sr.sprite = sprite;
             EditorUtility.SetDirty(sr);
+            Debug.Log($"[SignalScrubber] {slot.name}  <-  {sprite.name}");
         }
 
         static Mesh _quad;
