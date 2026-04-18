@@ -40,6 +40,16 @@ Populated as stories land. Each row names a `SpriteRenderer` slot created by a s
 | S04   | Desk   | `Clutter/StickyNotes`                 | SpriteRenderer | Stack or group of stickies |
 | S04   | Desk   | `Clutter/Books`                       | SpriteRenderer | Manuals / technical books |
 
+### Signals (S07)
+
+One sprite per authored signal, dropped into the `hiddenImage` slot of the matching `SignalData` asset at `Assets/ScriptableObjects/Signals/`.
+
+| Asset                              | id             | Target (f, n, p)      | Suggested imagery |
+|------------------------------------|----------------|-----------------------|-------------------|
+| `Signal_01_Monolith.asset`         | `monolith_01`  | (0.30, 0.70, 0.55)    | Black obelisk against starfield |
+| `Signal_02_Diagram.asset`          | `diagram_02`   | (0.65, 0.35, 0.25)    | Annotated alien schematic or orbital map |
+| `Signal_03_Silhouette.asset`       | `silhouette_03`| (0.85, 0.50, 0.75)    | Tall figure at a treeline, uncanny proportions |
+
 ### Drop-in workflow
 
 1. Export the sprite into the matching `Assets/Art/<category>/` folder.
