@@ -1,4 +1,5 @@
 using System.IO;
+using SignalScrubber.Polish;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -62,6 +63,12 @@ namespace SignalScrubber.EditorTools
 
             var urp = cam.GetUniversalAdditionalCameraData();
             urp.renderPostProcessing = true;
+
+            // Lock the render to 16:9 on every aspect — letterbox bars
+            // appear naturally on non-16:9 monitors because Unity clears
+            // the screen before rendering the camera rect.
+            if (cam.GetComponent<AspectRatioEnforcer>() == null)
+                cam.gameObject.AddComponent<AspectRatioEnforcer>();
         }
 
         static void BuildWorld()

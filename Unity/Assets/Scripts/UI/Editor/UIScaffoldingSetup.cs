@@ -26,44 +26,48 @@ namespace SignalScrubber.UI.Editor
             EditorApplication.delayCall += EnsurePanelSettings;
         }
 
+        // Game is designed around a 16:9 aspect ratio at 960 px height.
+        // Reference panel resolution matches that so ScaleWithScreenSize +
+        // match-height scales the UI uniformly across monitors.
+        static readonly Vector2Int ReferenceResolution = new Vector2Int(1707, 960);
+
         static void EnsurePanelSettings()
         {
-            bool changed = false;
-            if (AssetDatabase.LoadAssetAtPath<PanelSettings>(DiegeticPath) == null)
-            {
-                CreateDiegeticPanelSettings();
-                changed = true;
-            }
-            if (AssetDatabase.LoadAssetAtPath<PanelSettings>(OverlayPath) == null)
-            {
-                CreateOverlayPanelSettings();
-                changed = true;
-            }
-            if (changed) AssetDatabase.SaveAssets();
+            EnsurePanel(DiegeticPath, "Diegetic", ConfigureDiegetic);
+            EnsurePanel(OverlayPath,  "Overlay",  ConfigureOverlay);
+            AssetDatabase.SaveAssets();
         }
 
-        static void CreateDiegeticPanelSettings()
+        static void EnsurePanel(string path, string name, System.Action<PanelSettings> configure)
         {
-            var ps = ScriptableObject.CreateInstance<PanelSettings>();
-            ps.name = "Diegetic";
-            ps.scaleMode = PanelScaleMode.ConstantPixelSize;
-            ps.referenceResolution = new Vector2Int(1920, 1080);
-            ps.sortingOrder = 0;
-            EnsureDir(Path.GetDirectoryName(DiegeticPath));
-            AssetDatabase.CreateAsset(ps, DiegeticPath);
+            var ps = AssetDatabase.LoadAssetAtPath<PanelSettings>(path);
+            if (ps == null)
+            {
+                ps = ScriptableObject.CreateInstance<PanelSettings>();
+                ps.name = name;
+                EnsureDir(Path.GetDirectoryName(path));
+                AssetDatabase.CreateAsset(ps, path);
+            }
+            configure(ps);
+            EditorUtility.SetDirty(ps);
         }
 
-        static void CreateOverlayPanelSettings()
+        static void ConfigureDiegetic(PanelSettings ps)
         {
-            var ps = ScriptableObject.CreateInstance<PanelSettings>();
-            ps.name = "Overlay";
             ps.scaleMode = PanelScaleMode.ScaleWithScreenSize;
-            ps.referenceResolution = new Vector2Int(1920, 1080);
+            ps.referenceResolution = ReferenceResolution;
             ps.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
-            ps.match = 0.5f;
+            ps.match = 1f; // match height — game is locked at 960 px design height
+            ps.sortingOrder = 0;
+        }
+
+        static void ConfigureOverlay(PanelSettings ps)
+        {
+            ps.scaleMode = PanelScaleMode.ScaleWithScreenSize;
+            ps.referenceResolution = ReferenceResolution;
+            ps.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
+            ps.match = 1f;
             ps.sortingOrder = 10;
-            EnsureDir(Path.GetDirectoryName(OverlayPath));
-            AssetDatabase.CreateAsset(ps, OverlayPath);
         }
 
         static void EnsureDir(string dir)
