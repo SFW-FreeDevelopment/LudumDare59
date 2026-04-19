@@ -104,8 +104,8 @@ namespace SignalScrubber.EditorTools
         static void ConfigureGlobal(Light2D light)
         {
             light.lightType = Light2D.LightType.Global;
-            light.intensity = 0.18f;
-            light.color = new Color(0.55f, 0.62f, 0.78f);
+            light.intensity = 0.4f;
+            light.color = new Color(0.62f, 0.68f, 0.82f);
         }
 
         static void EnsureDeskLamp()
@@ -115,10 +115,10 @@ namespace SignalScrubber.EditorTools
             go.transform.position = new Vector3(5.5f, 4.5f, 0f);
             var light = go.GetComponent<Light2D>() ?? go.AddComponent<Light2D>();
             light.lightType = Light2D.LightType.Point;
-            light.color = new Color(1f, 0.75f, 0.45f);
-            light.intensity = 1.15f;
-            light.pointLightInnerRadius = 1.5f;
-            light.pointLightOuterRadius = 9.5f;
+            light.color = new Color(1f, 0.78f, 0.5f);
+            light.intensity = 1.45f;
+            light.pointLightInnerRadius = 2f;
+            light.pointLightOuterRadius = 12f;
         }
 
         static void EnsureCrtGlow()
