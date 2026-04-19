@@ -22,15 +22,17 @@ namespace SignalScrubber.Core
         [Range(0f, 1f)] public float targetPhase     = 0.5f;
 
         [Header("Difficulty")]
-        [Tooltip("Power-curve exponent used by SignalEvaluator. Lower = steeper drop-off near the target (harder to pin exactly, but you can still read direction from far away). Higher = more forgiving / linear.")]
-        [Range(0.15f, 1f)] public float sharpness = 0.5f;
+        [Tooltip("Plateau half-width around the target where per-axis clarity is locked at 1.0. Bigger = more forgiving landing zone.")]
+        [Range(0f, 0.15f)] public float innerTolerance = 0.05f;
+
+        [Tooltip("Power-curve exponent for the falloff *outside* the inner tolerance plateau. >1 = gentle shoulder near the plateau then fast drop mid-range. =1 = linear. <1 = steep drop right off the plateau.")]
+        [Range(0.3f, 3f)] public float sharpness = 1.3f;
 
         [Tooltip("Seconds the player has to lock this signal before it times out and auto-fails.")]
         [Range(5f, 120f)] public float allottedSeconds = 30f;
 
         [Header("Legacy (unused)")]
-        [Tooltip("Kept for serialization compatibility with older SignalData assets; SignalEvaluator now uses sharpness instead.")]
-        [HideInInspector] public float innerTolerance = 0.05f;
+        [Tooltip("Kept for serialization compatibility with older SignalData assets.")]
         [HideInInspector] public float outerTolerance = 0.20f;
 
         [Header("Presentation")]

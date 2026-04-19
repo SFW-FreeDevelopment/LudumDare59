@@ -20,28 +20,32 @@ namespace SignalScrubber.EditorTools
             public string Filename;
             public string Id;
             public float F, N, P;
+            public float Inner;
             public float Sharpness;
             public float Seconds;
             public string Archive;
         }
 
-        // Difficulty ramps across the three signals:
-        //   level 1 — forgiving curve (sharpness 0.7), generous time
-        //   level 2 — medium         (sharpness 0.5)
-        //   level 3 — sharp peak     (sharpness 0.3), tight time
+        // Difficulty ramps across the three signals. Each level tightens the
+        // inner plateau and steepens the outside falloff.
+        //   L1  inner ±0.08, sharpness 1.8, 40 s — generous landing zone,
+        //        gentle shoulder; reads almost linear in the falloff.
+        //   L2  inner ±0.05, sharpness 1.2, 30 s — standard
+        //   L3  inner ±0.025, sharpness 0.8, 22 s — tight plateau, punchy
+        //        drop-off right off the peak.
         static readonly Seed[] Seeds =
         {
             new Seed { Filename = "Signal_01_Monolith.asset",   Id = "monolith_01",
                        F = 0.30f, N = 0.70f, P = 0.55f,
-                       Sharpness = 0.7f, Seconds = 40f,
+                       Inner = 0.08f, Sharpness = 1.8f, Seconds = 40f,
                        Archive = "Monolith silhouette recovered. Source bearing unknown." },
             new Seed { Filename = "Signal_02_Diagram.asset",    Id = "diagram_02",
                        F = 0.65f, N = 0.35f, P = 0.25f,
-                       Sharpness = 0.5f, Seconds = 30f,
+                       Inner = 0.05f, Sharpness = 1.2f, Seconds = 30f,
                        Archive = "Annotated diagram fragment. Notation unfamiliar." },
             new Seed { Filename = "Signal_03_Silhouette.asset", Id = "silhouette_03",
                        F = 0.85f, N = 0.50f, P = 0.75f,
-                       Sharpness = 0.3f, Seconds = 22f,
+                       Inner = 0.025f, Sharpness = 0.8f, Seconds = 22f,
                        Archive = "Tall figure at the treeline. Still there." },
         };
 
@@ -64,6 +68,7 @@ namespace SignalScrubber.EditorTools
                     asset.targetNoise     = seed.N;
                     asset.targetPhase     = seed.P;
                     asset.archiveNote     = seed.Archive;
+                    asset.innerTolerance  = seed.Inner;
                     asset.sharpness       = seed.Sharpness;
                     asset.allottedSeconds = seed.Seconds;
                     AssetDatabase.CreateAsset(asset, path);
@@ -71,22 +76,16 @@ namespace SignalScrubber.EditorTools
                 }
                 else
                 {
-                    // Keep existing target tunings + archive note untouched
-                    // (designer may have edited them) but migrate the new
-                    // difficulty-curve fields if they are still at the
-                    // old defaults.
-                    bool dirty = false;
-                    if (Mathf.Approximately(asset.sharpness, 0.5f))
-                    {
-                        asset.sharpness = seed.Sharpness;
-                        dirty = true;
-                    }
-                    if (Mathf.Approximately(asset.allottedSeconds, 30f))
-                    {
-                        asset.allottedSeconds = seed.Seconds;
-                        dirty = true;
-                    }
-                    if (dirty) { EditorUtility.SetDirty(asset); updated++; }
+                    // Always re-apply the seeded difficulty curve because we
+                    // just reworked the math — old values (sharpness 0.3/0.5
+                    // /0.7 with no plateau) were unplayably tight. Target
+                    // tunings and archive copy are left alone so designer
+                    // edits survive.
+                    asset.innerTolerance  = seed.Inner;
+                    asset.sharpness       = seed.Sharpness;
+                    asset.allottedSeconds = seed.Seconds;
+                    EditorUtility.SetDirty(asset);
+                    updated++;
                 }
             }
 
