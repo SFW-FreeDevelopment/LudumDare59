@@ -11,7 +11,7 @@
             <ui:Label name="archive-body"  class="archive-body" />
         </ui:VisualElement>
 
-        <ui:VisualElement name="intro" class="card">
+        <ui:VisualElement name="intro" class="card" style="opacity: 0; display: none">
             <ui:Label text="SIGNAL SCRUBBER" class="card-title" />
             <ui:Label text="Drag the knobs and slider until the signal steadies." class="card-sub" />
             <ui:Label text="Watch SIGNAL STRENGTH climb. Press LOCK SIGNAL when it's close." class="card-sub" />
