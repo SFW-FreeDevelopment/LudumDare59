@@ -38,7 +38,7 @@ TemplateContainer {
     -unity-font: url("project://database/Assets/Fonts/Microgramma D Extended Bold.otf");
     -unity-font-definition: none;
     color: var(--ss-amber);
-    font-size: 11px;
+    font-size: 13px;
     letter-spacing: 2px;
     -unity-text-align: middle-center;
     margin-top: 4px;
@@ -134,10 +134,10 @@ TemplateContainer {
    vertically so the slider reads as a proper fader. */
 #col-frequency.bezel-slider {
     position: absolute;
-    left: 24.5%;
-    top: 7%;
+    left: 25.6%;
+    top: 6%;
     width: 120px;
-    height: 46%;
+    height: 49.6%;
     align-items: center;
     justify-content: flex-start;
 }
@@ -151,7 +151,7 @@ TemplateContainer {
    fills its bezel-slider column so it reads as a proper fader. Width
    matches the slider-background art's aspect so it doesn't squish. */
 .freq-slider {
-    width: 72px;
+    width: 58px;
     height: 88%;
     --unity-metrics-default-border_radius: 0;
 }
@@ -163,7 +163,7 @@ TemplateContainer {
     background-color: rgba(0, 0, 0, 0);
     border-width: 0;
     margin: 0;
-    padding: 0;
+    padding: 5px;
 }
 
 /* Hide the default track line / fill that Unity draws over the input. */
@@ -182,6 +182,7 @@ TemplateContainer {
     border-width: 0;
     width: 80px;
     height: 36px;
+    left: -7%
 }
 .freq-slider .unity-base-slider__dragger-border {
     background-color: rgba(0, 0, 0, 0);
