@@ -26,6 +26,7 @@ namespace SignalScrubber.Audio
         [SerializeField] AudioSource humBed;
         [SerializeField] AudioSource deskAmbience;
         [SerializeField] AudioSource signalTone;
+        [SerializeField] AudioSource musicBed;
 
         [Header("One-shots")]
         [SerializeField] AudioSource oneShot;
@@ -43,8 +44,15 @@ namespace SignalScrubber.Audio
         [SerializeField] float tonePitchMin = 0.9f;
         [SerializeField] float tonePitchMax = 1.1f;
 
+        [Header("Music")]
+        [SerializeField, Range(0f, 1f)] float musicBaseVolume = 0.35f;
+        [Tooltip("Multiplier applied to music volume while the archive card is up, so stingers land cleanly.")]
+        [SerializeField, Range(0f, 1f)] float musicDuckedMultiplier = 0.45f;
+        [SerializeField] float musicFadeSeconds = 0.6f;
+
         SignalData _current;
         int _lastTickSecond = -1;
+        Coroutine _musicFade;
 
         void OnEnable()
         {
@@ -56,6 +64,13 @@ namespace SignalScrubber.Audio
                 manager.OnRunCompleted  += HandleRunCompleted;
             }
             if (timer != null) timer.OnTick += HandleTimerTick;
+
+            if (musicBed != null)
+            {
+                musicBed.loop = true;
+                musicBed.volume = musicBaseVolume;
+                if (musicBed.clip != null && !musicBed.isPlaying) musicBed.Play();
+            }
         }
 
         void OnDisable()
@@ -81,6 +96,8 @@ namespace SignalScrubber.Audio
                 if (signalTone.clip != null) signalTone.Play();
             }
             _lastTickSecond = -1;
+            // Restore music volume as the next level spins up.
+            FadeMusic(musicBaseVolume);
             HandleTuningChanged(tuning);
         }
 
@@ -106,11 +123,19 @@ namespace SignalScrubber.Audio
             };
             if (clip != null && oneShot != null) oneShot.PlayOneShot(clip);
             _lastTickSecond = -1;
+
+            // Duck the music under the archive / SIGNAL LOST card so the
+            // lock stinger and the card text land cleanly. Restored on the
+            // next OnSignalStarted (or once the run completes).
+            DuckMusic();
         }
 
         void HandleRunCompleted()
         {
             if (broadcastEnd != null && oneShot != null) oneShot.PlayOneShot(broadcastEnd);
+            // Fade the bed out entirely for the outro card — no need to
+            // restore afterward since the scene reloads on restart.
+            FadeMusic(0f);
         }
 
         void HandleTimerTick(float remaining, float allotted)
@@ -133,6 +158,32 @@ namespace SignalScrubber.Audio
         public void PlayPowerOn()
         {
             if (powerOn != null && oneShot != null) oneShot.PlayOneShot(powerOn);
+        }
+
+        // ---------- music helpers ----------
+
+        void DuckMusic() => FadeMusic(musicBaseVolume * musicDuckedMultiplier);
+
+        void FadeMusic(float targetVolume)
+        {
+            if (musicBed == null) return;
+            if (_musicFade != null) StopCoroutine(_musicFade);
+            _musicFade = StartCoroutine(FadeMusicCoroutine(targetVolume));
+        }
+
+        System.Collections.IEnumerator FadeMusicCoroutine(float target)
+        {
+            float start = musicBed.volume;
+            float duration = Mathf.Max(0.01f, musicFadeSeconds);
+            float t = 0f;
+            while (t < duration)
+            {
+                t += Time.deltaTime;
+                musicBed.volume = Mathf.Lerp(start, target, t / duration);
+                yield return null;
+            }
+            musicBed.volume = target;
+            _musicFade = null;
         }
     }
 }

@@ -23,6 +23,7 @@ namespace SignalScrubber.EditorTools
         const string BedsDir    = "Assets/Audio/Beds";
         const string SfxDir     = "Assets/Audio/SFX";
         const string SignalsDir = "Assets/Audio/Signals";
+        const string MusicDir   = "Assets/Audio/Music";
         const string SignalsSoDir = "Assets/ScriptableObjects/Signals";
 
         [MenuItem("Tools/Signal Scrubber/Wire Audio")]
@@ -51,6 +52,12 @@ namespace SignalScrubber.EditorTools
             ConfigureAudioDir(SfxDir,     AudioClipLoadType.DecompressOnLoad,
                               AudioCompressionFormat.Vorbis, quality: 1.0f,
                               preload: true);
+
+            // Music bed → streaming, a touch lower quality than beds since
+            // it sits under everything and has its own built-in texture.
+            ConfigureAudioDir(MusicDir,   AudioClipLoadType.Streaming,
+                              AudioCompressionFormat.Vorbis, quality: 0.6f,
+                              preload: false);
         }
 
         static void ConfigureAudioDir(string dir, AudioClipLoadType load,
@@ -98,6 +105,7 @@ namespace SignalScrubber.EditorTools
             EnsureAudioSource(director.gameObject, "HumBed",        loop: true,  playOnAwake: true);
             EnsureAudioSource(director.gameObject, "DeskAmbience",  loop: true,  playOnAwake: true);
             EnsureAudioSource(director.gameObject, "SignalTone",    loop: true,  playOnAwake: false);
+            EnsureAudioSource(director.gameObject, "MusicBed",      loop: true,  playOnAwake: false);
             EnsureAudioSource(director.gameObject, "OneShot",       loop: false, playOnAwake: false);
 
             // Wire each slot on AudioDirector.
@@ -106,6 +114,7 @@ namespace SignalScrubber.EditorTools
             SetSrc(so, "humBed",       director.gameObject, "HumBed");
             SetSrc(so, "deskAmbience", director.gameObject, "DeskAmbience");
             SetSrc(so, "signalTone",   director.gameObject, "SignalTone");
+            SetSrc(so, "musicBed",     director.gameObject, "MusicBed");
             SetSrc(so, "oneShot",      director.gameObject, "OneShot");
 
             SetClip(so, "click",        $"{SfxDir}/sfx_click.wav");
@@ -126,6 +135,7 @@ namespace SignalScrubber.EditorTools
             AssignBedClip(director.gameObject, "StaticBed",    $"{BedsDir}/bed_static.wav");
             AssignBedClip(director.gameObject, "HumBed",       $"{BedsDir}/bed_hum.wav");
             AssignBedClip(director.gameObject, "DeskAmbience", $"{BedsDir}/bed_desk_ambience.wav");
+            AssignBedClip(director.gameObject, "MusicBed",     $"{MusicDir}/music_ambient.wav");
 
             // Hook AudioDirector reference into IntroOutroController if present.
             var intro = Object.FindFirstObjectByType<SignalScrubber.Polish.IntroOutroController>();
