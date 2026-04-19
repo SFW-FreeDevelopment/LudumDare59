@@ -6,6 +6,7 @@
 
     <ui:VisualElement class="crt-panel">
         <ui:Label text="TUNE THE SIGNAL" class="crt-title" />
+        <ui:Label name="timer-readout" class="timer-readout" text="00:30" style="display: none" />
 
         <ui:VisualElement class="signal-area">
             <ss:WaveformElement name="waveform" class="waveform" />

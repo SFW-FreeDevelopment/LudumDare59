@@ -99,5 +99,16 @@ namespace SignalScrubber.Core
             // Advance is deferred: LockFlash (S15) calls Advance() once
             // its transition completes so visuals can linger on the lock.
         }
+
+        /// <summary>
+        /// Called by SignalTimer when the allotted time runs out. Emits a
+        /// Fail outcome so LockFlash drives the same transition beat as a
+        /// manual bad lock.
+        /// </summary>
+        public void ForceTimeout()
+        {
+            if (!IsValidIndex || _runCompleted) return;
+            OnSignalLocked?.Invoke(Current, LockOutcome.Fail, 0f);
+        }
     }
 }

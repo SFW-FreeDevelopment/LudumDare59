@@ -18,6 +18,25 @@ TemplateContainer {
     background-color: rgba(0, 0, 0, 0);
 }
 
+/* Countdown timer — DS-DIGIT readout anchored to the top-right of the
+   CRT glass, above the screen. Turns red + pulses when time is low. */
+.timer-readout {
+    position: absolute;
+    top: 5%;
+    right: 30%;
+    -unity-font: url("project://database/Assets/Fonts/DS-DIGIT.TTF");
+    -unity-font-definition: none;
+    color: var(--ss-amber);
+    font-size: 32px;
+    letter-spacing: 2px;
+    -unity-text-align: middle-right;
+    text-shadow: 0 0 2px rgba(255, 179, 92, 0.45);
+}
+.timer-readout--low {
+    color: rgb(255, 90, 70);
+    text-shadow: 0 0 4px rgba(255, 90, 70, 0.85);
+}
+
 /* Title lives on the CRT glass — VT323, phosphor glow, loose letters. */
 .crt-title {
     position: absolute;

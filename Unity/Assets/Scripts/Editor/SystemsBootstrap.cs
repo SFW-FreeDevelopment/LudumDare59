@@ -53,6 +53,18 @@ namespace SignalScrubber.EditorTools
             if (ctrl != null) SetSerializedReference(manager, "frame", ctrl);
             SetSerializedArray(manager, "signals", LoadAllSignals());
 
+            // SignalTimer owns the per-level countdown.
+            var timer = EnsureChildComponent<SignalTimer>(systems, "SignalTimer");
+            SetSerializedReference(timer, "manager", manager);
+
+            // TimerDriver on the DiegeticUI GameObject paints the readout.
+            if (diegetic != null)
+            {
+                var timerDriver = diegetic.GetComponent<TimerDriver>();
+                if (timerDriver == null) timerDriver = diegetic.AddComponent<TimerDriver>();
+                SetSerializedReference(timerDriver, "timer", timer);
+            }
+
             // SignalRenderer: needs TuningState, SignalManager, and the
             // CrtMaterialBinder sitting on CRT/Screen/ScreenQuad.
             var renderer = EnsureChildComponent<SignalRenderer>(systems, "SignalRenderer");
