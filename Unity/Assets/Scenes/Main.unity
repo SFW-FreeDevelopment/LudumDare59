@@ -445,9 +445,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.00027900934
+    y: 0.00006496906
     width: 1
-    height: 0.999442
+    height: 0.99987006
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -733,6 +733,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6aba2c53c2f1b4e4e952667b487eba88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.UI.CrtFrameController
+--- !u!114 &644190626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 644190618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2902834e5e42a1940a63d7e95663b907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.UI.TimerDriver
+  timer: {fileID: 657612806}
 --- !u!1 &657612804
 GameObject:
   m_ObjectHideFlags: 0
@@ -2186,7 +2199,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1790441872882725498, guid: c3c74705adf584b4290c1585718f8919, type: 3}
       insertIndex: -1
       addedObject: {fileID: 532426871}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8377783005221975003, guid: c3c74705adf584b4290c1585718f8919, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 644190626}
   m_SourcePrefab: {fileID: 100100000, guid: c3c74705adf584b4290c1585718f8919, type: 3}
 --- !u!1001 &4375455866248776938
 PrefabInstance:
