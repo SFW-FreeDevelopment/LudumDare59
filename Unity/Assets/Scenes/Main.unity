@@ -247,8 +247,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fad1e8980e51bfb4a9dfb765da39623e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.Polish.AmbientFlicker
-  binder: {fileID: 0}
-  powerLed: {fileID: 0}
+  binder: {fileID: 1998410514}
+  powerLed: {fileID: 1218437261}
   ledBaseAlpha: 0.9
   crtFlickerRate: 3
   ledBreathRate: 5
@@ -445,9 +445,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.00006496906
+    y: 0.00027900934
     width: 1
-    height: 0.99987006
+    height: 0.999442
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -733,6 +733,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6aba2c53c2f1b4e4e952667b487eba88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.UI.CrtFrameController
+--- !u!1 &657612804
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 657612805}
+  - component: {fileID: 657612806}
+  m_Layer: 0
+  m_Name: SignalTimer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &657612805
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657612804}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1603599438}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &657612806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657612804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1d72d829fbd9c446b5e2084ae347e37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.Core.SignalTimer
+  manager: {fileID: 1921207515}
+  lowThreshold: 5
 --- !u!1 &754624501
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,7 +914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.Polish.LockFlash
   manager: {fileID: 1921207515}
-  binder: {fileID: 0}
+  binder: {fileID: 1998410514}
   overlayDocument: {fileID: 1601371668}
   successHold: 1.5
   partialHold: 1
@@ -942,6 +988,11 @@ Transform:
 --- !u!4 &1218437260 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1790441872882725498, guid: c3c74705adf584b4290c1585718f8919, type: 3}
+  m_PrefabInstance: {fileID: 241265690141938415}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &1218437261 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 1835151776085104120, guid: c3c74705adf584b4290c1585718f8919, type: 3}
   m_PrefabInstance: {fileID: 241265690141938415}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1289502891
@@ -1698,6 +1749,7 @@ Transform:
   - {fileID: 789400450}
   - {fileID: 1900923369}
   - {fileID: 442604597}
+  - {fileID: 657612805}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1618823740
@@ -1746,7 +1798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.Rendering.SignalRenderer
   tuning: {fileID: 574882156}
   manager: {fileID: 1921207515}
-  binder: {fileID: 0}
+  binder: {fileID: 1998410514}
 --- !u!1 &1900923368
 GameObject:
   m_ObjectHideFlags: 0
@@ -1966,6 +2018,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1603599438}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1998410514 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 342551774705779501, guid: c3c74705adf584b4290c1585718f8919, type: 3}
+  m_PrefabInstance: {fileID: 241265690141938415}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dbb12b3bcfb91c4595fbeb2c15e203f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.Rendering.CrtMaterialBinder
 --- !u!1 &2051936684
 GameObject:
   m_ObjectHideFlags: 0
