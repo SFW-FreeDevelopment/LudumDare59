@@ -10,10 +10,14 @@
 
         <ui:VisualElement class="signal-area">
             <ss:WaveformElement name="waveform" class="waveform" />
-            <ui:VisualElement name="signal-readout" class="signal-readout">
-                <ui:Label name="signal-strength-label" class="signal-strength-label" text="SIGNAL STRENGTH" />
-                <ui:Label name="signal-value" class="signal-value" text="-- %" />
-            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Status readout anchored top-left of the CRT glass, opposite the
+             timer. Outside signal-area so its position is fixed to the
+             viewport, not tied to the waveform box. -->
+        <ui:VisualElement name="signal-readout" class="signal-readout">
+            <ui:Label name="signal-strength-label" class="signal-strength-label" text="SIGNAL STRENGTH" />
+            <ui:Label name="signal-value" class="signal-value" text="-- %" />
         </ui:VisualElement>
 
         <ui:VisualElement name="col-frequency" class="control-column bezel-slider">

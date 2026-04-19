@@ -82,15 +82,14 @@ TemplateContainer {
     align-self: center;
 }
 
-/* Readout wrapper — sits on the CRT glass above the waveform. */
+/* Readout — anchored top-left of the CRT glass, mirroring the timer
+   top-right so the two readouts form a status bar across the top. */
 .signal-readout {
     position: absolute;
-    top: -240px;
-    left: 0;
-    right: 0;
-    align-items: center;
+    top: 3%;
+    left: 32%;
+    align-items: flex-start;
     flex-direction: column;
-    background-color: rgba(0, 0, 0, 0.75);
 }
 
 /* "SIGNAL STRENGTH" label feels like the computer printed it — VT323. */
@@ -98,22 +97,22 @@ TemplateContainer {
     -unity-font: url("project://database/Assets/Fonts/VT323-Regular.ttf");
     -unity-font-definition: none;
     color: var(--ss-phosphor);
-    font-size: 18px;
+    font-size: 16px;
     letter-spacing: 4px;
-    -unity-text-align: middle-center;
+    -unity-text-align: middle-left;
     text-shadow: 0 0 3px rgba(127, 255, 158, 0.55);
 }
 
-/* Numeric reading — DS-DIGIT, amber, subtle glow, large. */
+/* Numeric reading — DS-DIGIT, amber, subtle glow. */
 .signal-value {
     -unity-font: url("project://database/Assets/Fonts/DS-DIGIT.TTF");
     -unity-font-definition: none;
     color: var(--ss-amber);
-    font-size: 42px;
+    font-size: 36px;
     letter-spacing: 2px;
-    -unity-text-align: middle-center;
+    -unity-text-align: middle-left;
     text-shadow: 0 0 2px rgba(255, 179, 92, 0.45);
-    margin-top: -4px;
+    margin-top: -2px;
 }
 
 /* Controls sit on the bezel face below the screen, not at the window
