@@ -32,7 +32,7 @@ namespace SignalScrubber.EditorTools
             var tuning  = EnsureChildComponent<TuningState>(systems, "TuningState");
 
             // CrtFrameController.tuning -> TuningState
-            var diegetic = FindInScene("UI/DiegeticUI");
+            var diegetic = FindUIDocumentGameObject("DiegeticUI");
             CrtFrameController ctrl = null;
             if (diegetic != null)
             {
@@ -113,7 +113,7 @@ namespace SignalScrubber.EditorTools
             var lockFlash = EnsureChildComponent<LockFlash>(systems, "LockFlash");
             SetSerializedReference(lockFlash, "manager", manager);
             if (binder != null) SetSerializedReference(lockFlash, "binder", binder);
-            var overlayGo = FindInScene("UI/OverlayUI");
+            var overlayGo = FindUIDocumentGameObject("OverlayUI");
             UnityEngine.UIElements.UIDocument overlayDoc = null;
             if (overlayGo != null)
             {
@@ -202,6 +202,22 @@ namespace SignalScrubber.EditorTools
             src.playOnAwake = playOnAwake;
             src.spatialBlend = 0f; // 2D
             return src;
+        }
+
+        /// <summary>
+        /// Finds a UIDocument in the scene by its GameObject name. Tolerant
+        /// of the UIDocument being nested anywhere — e.g. DiegeticUI is
+        /// re-parented under World/CRT/Screen/DiegeticUIAnchor by
+        /// PrefabBootstrap, so a root-relative path lookup no longer finds it.
+        /// </summary>
+        static GameObject FindUIDocumentGameObject(string name)
+        {
+            foreach (var doc in Object.FindObjectsByType<UnityEngine.UIElements.UIDocument>(
+                FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                if (doc != null && doc.gameObject.name == name) return doc.gameObject;
+            }
+            return null;
         }
 
         static GameObject FindInScene(string path)
