@@ -1,4 +1,5 @@
 using System.Collections;
+using SignalScrubber.Audio;
 using SignalScrubber.Core;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,6 +26,7 @@ namespace SignalScrubber.Polish
     {
         [SerializeField] UIDocument overlayDocument;
         [SerializeField] SignalManager manager;
+        [SerializeField] AudioDirector audioDirector;
 
         [Header("Input filter")]
         [Tooltip("DiegeticUI GameObject. Its UIDocument tree is disabled while intro/outro is up.")]
@@ -210,6 +212,7 @@ namespace SignalScrubber.Polish
             SetOverlayActive(false);
 
             _started = true;
+            if (audioDirector != null) audioDirector.PlayPowerOn();
             if (manager != null)
             {
                 Log("DismissIntroThenBegin: calling SignalManager.Begin()");

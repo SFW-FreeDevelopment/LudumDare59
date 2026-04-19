@@ -1,26 +1,30 @@
 using SignalScrubber.Core;
-using SignalScrubber.UI;
 using UnityEngine;
 
 namespace SignalScrubber.Audio
 {
     /// <summary>
-    /// Scene-singleton audio bus. Owns the continuous static/hum/signal
-    /// beds and a single one-shot <see cref="AudioSource"/> pool. Reacts
-    /// to TuningState changes (clarity -> static/tone volumes, frequency
-    /// -> tone pitch) and to SignalManager events (tone swap on start,
-    /// stinger on lock). Null clip fields are tolerated so the build runs
-    /// before the real audio drops in.
+    /// Scene-singleton audio bus. Owns the four continuous beds
+    /// (static, hum, desk ambience, per-signal tone) and a single
+    /// one-shot <see cref="AudioSource"/> pool. Reacts to TuningState
+    /// changes (clarity → static/tone volumes, frequency → tone pitch),
+    /// to SignalManager events (tone swap on start, stinger on lock,
+    /// broadcast-end stinger on run complete), and to SignalTimer
+    /// (heartbeat tick each second during the low-time warning).
+    /// Every clip field is nullable so the build still runs with
+    /// missing audio.
     /// </summary>
     public sealed class AudioDirector : MonoBehaviour
     {
         [Header("Refs")]
         [SerializeField] TuningState tuning;
         [SerializeField] SignalManager manager;
+        [SerializeField] SignalTimer timer;
 
         [Header("Beds")]
         [SerializeField] AudioSource staticBed;
         [SerializeField] AudioSource humBed;
+        [SerializeField] AudioSource deskAmbience;
         [SerializeField] AudioSource signalTone;
 
         [Header("One-shots")]
@@ -29,6 +33,9 @@ namespace SignalScrubber.Audio
         [SerializeField] AudioClip lockSuccess;
         [SerializeField] AudioClip lockPartial;
         [SerializeField] AudioClip lockFail;
+        [SerializeField] AudioClip timerTick;
+        [SerializeField] AudioClip powerOn;
+        [SerializeField] AudioClip broadcastEnd;
 
         [Header("Mix")]
         [SerializeField, Range(0f, 1f)] float staticMin = 0.05f;
@@ -37,25 +44,30 @@ namespace SignalScrubber.Audio
         [SerializeField] float tonePitchMax = 1.1f;
 
         SignalData _current;
+        int _lastTickSecond = -1;
 
         void OnEnable()
         {
-            if (tuning  != null) tuning.OnChanged        += HandleTuningChanged;
+            if (tuning  != null) tuning.OnChanged += HandleTuningChanged;
             if (manager != null)
             {
                 manager.OnSignalStarted += HandleSignalStarted;
                 manager.OnSignalLocked  += HandleSignalLocked;
+                manager.OnRunCompleted  += HandleRunCompleted;
             }
+            if (timer != null) timer.OnTick += HandleTimerTick;
         }
 
         void OnDisable()
         {
-            if (tuning  != null) tuning.OnChanged        -= HandleTuningChanged;
+            if (tuning  != null) tuning.OnChanged -= HandleTuningChanged;
             if (manager != null)
             {
                 manager.OnSignalStarted -= HandleSignalStarted;
                 manager.OnSignalLocked  -= HandleSignalLocked;
+                manager.OnRunCompleted  -= HandleRunCompleted;
             }
+            if (timer != null) timer.OnTick -= HandleTimerTick;
         }
 
         void HandleSignalStarted(SignalData s)
@@ -68,6 +80,7 @@ namespace SignalScrubber.Audio
                 signalTone.loop = true;
                 if (signalTone.clip != null) signalTone.Play();
             }
+            _lastTickSecond = -1;
             HandleTuningChanged(tuning);
         }
 
@@ -92,11 +105,34 @@ namespace SignalScrubber.Audio
                 _                   => lockFail,
             };
             if (clip != null && oneShot != null) oneShot.PlayOneShot(clip);
+            _lastTickSecond = -1;
         }
 
+        void HandleRunCompleted()
+        {
+            if (broadcastEnd != null && oneShot != null) oneShot.PlayOneShot(broadcastEnd);
+        }
+
+        void HandleTimerTick(float remaining, float allotted)
+        {
+            if (timer == null || !timer.IsLow) { _lastTickSecond = -1; return; }
+            // Tick at each whole-second boundary while in the low band.
+            int second = Mathf.CeilToInt(remaining);
+            if (second == _lastTickSecond) return;
+            _lastTickSecond = second;
+            if (timerTick != null && oneShot != null) oneShot.PlayOneShot(timerTick, 0.7f);
+        }
+
+        /// <summary>Detent click on knob / slider step. Hooked by CrtFrameController.</summary>
         public void Click()
         {
             if (click != null && oneShot != null) oneShot.PlayOneShot(click, 0.4f);
+        }
+
+        /// <summary>Intro dismissed — the set powers on.</summary>
+        public void PlayPowerOn()
+        {
+            if (powerOn != null && oneShot != null) oneShot.PlayOneShot(powerOn);
         }
     }
 }
