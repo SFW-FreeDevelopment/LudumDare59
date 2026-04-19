@@ -1,6 +1,7 @@
 using System.Collections;
 using SignalScrubber.Core;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -250,6 +251,29 @@ namespace SignalScrubber.Polish
                 _outro.style.opacity = 0f;
                 yield return FadeIn(_outro, fadeDuration);
             }
+
+            // Outro is visible — wait for any input to restart the run.
+            yield return WaitForRestartInput();
+            RestartScene();
+        }
+
+        IEnumerator WaitForRestartInput()
+        {
+            // Small grace period so the click/key that landed the last
+            // lock doesn't immediately restart on the outro's first frame.
+            yield return new WaitForSeconds(0.35f);
+
+            while (true)
+            {
+                if (PollDismissInput()) yield break;
+                yield return null;
+            }
+        }
+
+        static void RestartScene()
+        {
+            var scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.buildIndex);
         }
 
         void SetControlsInteractable(bool on)
