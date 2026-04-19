@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Signal_02_Diagram
   m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.Core.SignalData
   id: diagram_02
-  hiddenImage: {fileID: 0}
+  hiddenImage: {fileID: -4336531465999971064, guid: e1f39dec9a30a874fa5eb74ed4595d0d, type: 3}
   signalTone: {fileID: 8300000, guid: cca76c2e4d561db4d9166702b54ca2c8, type: 3}
   targetFrequency: 0.65
   targetNoise: 0.35

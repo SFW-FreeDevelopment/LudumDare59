@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Signal_03_Silhouette
   m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.Core.SignalData
   id: silhouette_03
-  hiddenImage: {fileID: 0}
+  hiddenImage: {fileID: -4336531465999971064, guid: e1f39dec9a30a874fa5eb74ed4595d0d, type: 3}
   signalTone: {fileID: 8300000, guid: cc28f3b6618b4ba418f26cbc3cbd8256, type: 3}
   targetFrequency: 0.85
   targetNoise: 0.5

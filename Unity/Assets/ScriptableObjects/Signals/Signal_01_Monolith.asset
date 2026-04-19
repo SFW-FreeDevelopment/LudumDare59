@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Signal_01_Monolith
   m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.Core.SignalData
   id: monolith_01
-  hiddenImage: {fileID: 0}
+  hiddenImage: {fileID: -4336531465999971064, guid: e1f39dec9a30a874fa5eb74ed4595d0d, type: 3}
   signalTone: {fileID: 8300000, guid: b3cb24735a553624696471ba8bab7c20, type: 3}
   targetFrequency: 0.3
   targetNoise: 0.7
