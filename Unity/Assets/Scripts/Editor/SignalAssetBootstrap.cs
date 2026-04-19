@@ -14,6 +14,7 @@ namespace SignalScrubber.EditorTools
     internal static class SignalAssetBootstrap
     {
         const string SignalsDir = "Assets/ScriptableObjects/Signals";
+        const string PlaceholderHiddenImagePath = "Assets/Art/scene01.png";
 
         struct Seed
         {
@@ -54,6 +55,8 @@ namespace SignalScrubber.EditorTools
         {
             if (!Directory.Exists(SignalsDir)) Directory.CreateDirectory(SignalsDir);
 
+            var placeholderSprite = LoadSpriteWithFallback(PlaceholderHiddenImagePath);
+
             int created = 0;
             int updated = 0;
             foreach (var seed in Seeds)
@@ -71,6 +74,7 @@ namespace SignalScrubber.EditorTools
                     asset.innerTolerance  = seed.Inner;
                     asset.sharpness       = seed.Sharpness;
                     asset.allottedSeconds = seed.Seconds;
+                    if (placeholderSprite != null) asset.hiddenImage = placeholderSprite;
                     AssetDatabase.CreateAsset(asset, path);
                     created++;
                 }
@@ -84,13 +88,43 @@ namespace SignalScrubber.EditorTools
                     asset.innerTolerance  = seed.Inner;
                     asset.sharpness       = seed.Sharpness;
                     asset.allottedSeconds = seed.Seconds;
+
+                    // Fill the hidden image slot if it's empty or still the
+                    // previously-wired placeholder. Designer-assigned art is
+                    // preserved once any of the hidden images is unique.
+                    if (placeholderSprite != null
+                        && (asset.hiddenImage == null || asset.hiddenImage == placeholderSprite))
+                    {
+                        asset.hiddenImage = placeholderSprite;
+                    }
+
                     EditorUtility.SetDirty(asset);
                     updated++;
                 }
             }
 
             if (created > 0 || updated > 0) AssetDatabase.SaveAssets();
-            Debug.Log($"[SignalScrubber] Placeholder signals: {created} created, {updated} migrated.");
+            Debug.Log($"[SignalScrubber] Placeholder signals: {created} created, {updated} migrated. " +
+                      $"hiddenImage = {(placeholderSprite != null ? placeholderSprite.name : "<missing>")}");
+        }
+
+        /// <summary>
+        /// Loads a Sprite from a PNG. Handles the case where Unity imports
+        /// the texture in spriteMode: Multiple, which makes
+        /// LoadAssetAtPath&lt;Sprite&gt; return null — in that case we walk
+        /// the sub-assets and return the first Sprite.
+        /// </summary>
+        static Sprite LoadSpriteWithFallback(string assetPath)
+        {
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+            if (sprite != null) return sprite;
+
+            var all = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+            foreach (var obj in all)
+                if (obj is Sprite s) return s;
+
+            Debug.LogWarning($"[SignalScrubber] No Sprite found at {assetPath}");
+            return null;
         }
     }
 }
