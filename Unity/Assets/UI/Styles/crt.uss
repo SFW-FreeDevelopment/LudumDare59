@@ -83,11 +83,12 @@ TemplateContainer {
 }
 
 /* Readout — anchored top-left of the CRT glass, mirroring the timer
-   top-right so the two readouts form a status bar across the top. */
+   top-right so the two readouts form a status bar across the top.
+   Margins match .timer-readout (top 3% / right 4%) -> left 4%. */
 .signal-readout {
     position: absolute;
     top: 3%;
-    left: 32%;
+    left: 4%;
     align-items: flex-start;
     flex-direction: column;
 }
