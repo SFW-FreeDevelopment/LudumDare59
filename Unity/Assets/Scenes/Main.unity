@@ -145,7 +145,7 @@ Transform:
   m_GameObject: {fileID: 37996646}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.24, y: 1.54, z: -0.01}
+  m_LocalPosition: {x: -9.24, y: 0.57, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1337,7 +1337,7 @@ Transform:
   m_GameObject: {fileID: 1030895091}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.49, y: 1.47, z: -0.01}
+  m_LocalPosition: {x: -6.49, y: 3.5, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1787,7 +1787,7 @@ Transform:
   m_GameObject: {fileID: 1368022141}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.5, y: 4.5, z: 0}
+  m_LocalPosition: {x: -7.41, y: 2.3000002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1810,7 +1810,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 0.78, b: 0.5, a: 1}
-  m_Intensity: 2
+  m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 00000000
@@ -2944,6 +2944,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2098696870}
     m_Modifications:
+    - target: {fileID: 1255114282243110615, guid: 9507a625056226146a0964574a876290, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255114282243110615, guid: 9507a625056226146a0964574a876290, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.56
+      objectReference: {fileID: 0}
     - target: {fileID: 2287860843415817566, guid: 9507a625056226146a0964574a876290, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2984,9 +2992,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5090814136334390256, guid: 9507a625056226146a0964574a876290, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 5090814136334390256, guid: 9507a625056226146a0964574a876290, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.67
+      objectReference: {fileID: 0}
     - target: {fileID: 8170882399957062581, guid: 9507a625056226146a0964574a876290, type: 3}
       propertyPath: m_Name
       value: Desk
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050941643517616137, guid: 9507a625056226146a0964574a876290, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.51
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
