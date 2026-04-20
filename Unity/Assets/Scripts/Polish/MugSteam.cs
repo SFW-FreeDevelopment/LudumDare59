@@ -26,7 +26,7 @@ namespace SignalScrubber.Polish
             var t = go.transform;
             t.SetParent(transform, false);
             t.localPosition = localOffset;
-            t.localRotation = Quaternion.identity;
+            t.rotation = Quaternion.identity;
 
             var ps = go.AddComponent<ParticleSystem>();
             ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
@@ -38,7 +38,7 @@ namespace SignalScrubber.Polish
             main.startSpeed = riseSpeed;
             main.startSize = new ParticleSystem.MinMaxCurve(startSize * 0.7f, startSize * 1.3f);
             main.startColor = new Color(1f, 1f, 1f, startAlpha);
-            main.simulationSpace = ParticleSystemSimulationSpace.Local;
+            main.simulationSpace = ParticleSystemSimulationSpace.World;
             main.maxParticles = 64;
             main.gravityModifier = 0f;
             main.startRotation = new ParticleSystem.MinMaxCurve(0f, Mathf.PI * 2f);
@@ -55,7 +55,7 @@ namespace SignalScrubber.Polish
 
             var velocity = ps.velocityOverLifetime;
             velocity.enabled = true;
-            velocity.space = ParticleSystemSimulationSpace.Local;
+            velocity.space = ParticleSystemSimulationSpace.World;
             velocity.x = new ParticleSystem.MinMaxCurve(-0.08f, 0.08f);
             velocity.y = new ParticleSystem.MinMaxCurve(riseSpeed * 0.8f, riseSpeed * 1.2f);
 
@@ -88,10 +88,46 @@ namespace SignalScrubber.Polish
             var renderer = go.GetComponent<ParticleSystemRenderer>();
             renderer.renderMode = ParticleSystemRenderMode.Billboard;
             renderer.sortingOrder = sortingOrder;
-            var mat = Resources.GetBuiltinResource<Material>("Sprites-Default.mat");
-            if (mat != null) renderer.sharedMaterial = mat;
+            renderer.sharedMaterial = BuildParticleMaterial();
 
             ps.Play();
+        }
+
+        static Material BuildParticleMaterial()
+        {
+            var shader = Shader.Find("Sprites/Default");
+            if (shader == null) shader = Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default");
+            if (shader == null) shader = Shader.Find("Unlit/Transparent");
+            var mat = new Material(shader) { name = "SteamParticle" };
+            if (mat.HasProperty("_MainTex"))
+                mat.mainTexture = BuildPuffTexture();
+            return mat;
+        }
+
+        static Texture2D BuildPuffTexture()
+        {
+            const int size = 64;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false)
+            {
+                name = "SteamPuff",
+                wrapMode = TextureWrapMode.Clamp,
+                filterMode = FilterMode.Bilinear,
+            };
+            var pixels = new Color32[size * size];
+            float cx = (size - 1) * 0.5f;
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                float dx = (x - cx) / cx;
+                float dy = (y - cx) / cx;
+                float d  = Mathf.Sqrt(dx * dx + dy * dy);
+                float a  = Mathf.Clamp01(1f - d);
+                a = a * a;
+                pixels[y * size + x] = new Color(1f, 1f, 1f, a);
+            }
+            tex.SetPixels32(pixels);
+            tex.Apply(false, true);
+            return tex;
         }
     }
 }
