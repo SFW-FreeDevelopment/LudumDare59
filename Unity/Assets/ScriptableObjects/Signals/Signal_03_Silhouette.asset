@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Signal_03_Silhouette
   m_EditorClassIdentifier: Assembly-CSharp::SignalScrubber.Core.SignalData
   id: silhouette_03
-  hiddenImage: {fileID: -4336531465999971064, guid: e1f39dec9a30a874fa5eb74ed4595d0d, type: 3}
+  hiddenImage: {fileID: 657711902809561822, guid: e141778c1d56f8b4dbc84ce730e04f92, type: 3}
   signalTone: {fileID: 8300000, guid: cc28f3b6618b4ba418f26cbc3cbd8256, type: 3}
   targetFrequency: 0.85
   targetNoise: 0.5
   targetPhase: 0.75
   innerTolerance: 0.025
   sharpness: 0.8
-  allottedSeconds: 22
+  allottedSeconds: 30
   outerTolerance: 0.2
   tint: {r: 0.49, g: 1, b: 0.62, a: 1}
   archiveNote: Tall figure at the treeline. Still there.
